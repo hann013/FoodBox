@@ -32,7 +32,7 @@ public class ListActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent launchCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(launchCamera);
+                startActivityForResult(launchCamera, 100);
             }
         });
 
