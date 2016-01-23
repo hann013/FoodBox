@@ -31,8 +31,8 @@ public class ListActivity extends AppCompatActivity
     public static final String USER_ID = "USER_ID";
     public static final String USER_EMAIL = "USER_EMAIL";
     public static final String FIREBASE_URI = "https://foodbox.firebaseio.com";
+    public static final int IMAGE_CAPTURE_REQUEST_CODE = 100;
 
-    private final int IMAGE_CAPTURE_REQUEST_CODE = 100;
     private Uri photoUri;
     private String userEmail;
     private Firebase ref;
@@ -48,7 +48,9 @@ public class ListActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                takePicture();
+                photoUri = getOutputFileUri();
+                AddFoodDialogFragment dialog = AddFoodDialogFragment.newInstance(photoUri);
+                dialog.show(getFragmentManager(), "AddFoodDialog");
             }
         });
 
@@ -80,28 +82,6 @@ public class ListActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.list, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -142,13 +122,6 @@ public class ListActivity extends AppCompatActivity
                 Toast.makeText(this, "Image capture failed", Toast.LENGTH_LONG).show();
             }
         }
-    }
-
-    private void takePicture() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        photoUri = getOutputFileUri();
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-        startActivityForResult(cameraIntent, IMAGE_CAPTURE_REQUEST_CODE);
     }
 
     private Uri getOutputFileUri() {
