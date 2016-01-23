@@ -35,8 +35,8 @@ public class RecognitionActivity extends FragmentActivity {
 
   // IMPORTANT NOTE: you should replace these keys with your own App ID and secret.
   // These can be obtained at https://developer.clarifai.com/applications
-  private static final String APP_ID = "RQQkQDt73v3r93z7-1eHVbcJM3X9h_3mUbUVrGq8";
-  private static final String APP_SECRET = "P-jtLJyUSIWSulJoP6R8HrCMsflXXKwbXx3tFplo";
+  private static final String APP_ID = "Dzyc6O-UZ6pvZTPGylb-Nao2yvTyO3TG_ZY7UNyF";
+  private static final String APP_SECRET = "m1RQPouLYUF8XuQr5oWy6F8ARIQ1AzCsKMK8461X";
 
   public static final String INPUT_URI = "INPUT_URI";
 
