@@ -1,10 +1,14 @@
 package com.waterloohacks2015.foodbox;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,10 +18,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class ListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private final int REQUEST_CODE = 100;
+    private final String APP_NAME = "FoodBox";
     private Uri photoUri;
 
     @Override
@@ -31,8 +43,7 @@ public class ListActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent launchCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(launchCamera, 100);
+                takePicture();
             }
         });
 
@@ -101,5 +112,51 @@ public class ListActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            // Image captured and saved to fileUri specified in the Intent
+            Toast.makeText(this, "Image saved to:\n" + photoUri, Toast.LENGTH_LONG).show();
+
+            Intent openPictureIntent = new Intent(Intent.ACTION_VIEW);
+            openPictureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            openPictureIntent.setDataAndType(photoUri, "image/jpeg");
+            startActivity(openPictureIntent);
+        } else if (resultCode == RESULT_CANCELED) {
+            // Do nothing
+        } else {
+            // Image capture failed
+            Toast.makeText(this, "Image capture failed", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void takePicture() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        photoUri = getOutputFileUri();
+        Log.d("ListActivity", photoUri.toString());
+        //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+        startActivityForResult(cameraIntent, REQUEST_CODE);
+    }
+
+    private Uri getOutputFileUri() {
+        File photoDir = new File(
+                this.getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_NAME);
+
+        // Create the storage directory if it does not exist
+        if (!photoDir.exists()){
+            if (!photoDir.mkdirs()){
+                Toast.makeText(this, "Failed to get photo directory", Toast.LENGTH_LONG).show();
+                return null;
+            }
+        }
+
+        // Create a photo file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CANADA).format(new Date());
+        File photoFile = new File(photoDir.getPath() + File.separator + "IMG_"+ timeStamp + ".jpg");
+        return Uri.fromFile(photoFile);
     }
 }
