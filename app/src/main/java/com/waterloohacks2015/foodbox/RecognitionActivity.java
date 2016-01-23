@@ -1,5 +1,6 @@
 package com.waterloohacks2015.foodbox;
 
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,7 +31,8 @@ import static android.provider.MediaStore.Images.Media;
 /**
  * A simple Activity that performs recognition using the Clarifai API.
  */
-public class RecognitionActivity extends FragmentActivity {
+public class RecognitionActivity extends FragmentActivity implements
+        PickFoodDialogFragment.OnDialogChosenListener, NameOtherDialogFragment.OnDialogChosenListener {
   private static final String TAG = RecognitionActivity.class.getSimpleName();
 
   // IMPORTANT NOTE: you should replace these keys with your own App ID and secret.
@@ -40,10 +42,13 @@ public class RecognitionActivity extends FragmentActivity {
 
   public static final String INPUT_URI = "INPUT_URI";
 
+  public static final String OTHER_TEXT = "Other...";
+
   private final ClarifaiClient client = new ClarifaiClient(APP_ID, APP_SECRET);
   private ImageView imageView;
   private TextView textView;
   private PickFoodDialogFragment dialogFragment;
+  private NameOtherDialogFragment otherFoodDialogFragment;
   private ProgressDialog _progressDialog;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -148,9 +153,10 @@ public class RecognitionActivity extends FragmentActivity {
           count++;
           if (count > 4) break;
         }
+        foodItems.add(RecognitionActivity.OTHER_TEXT);
         dialogFragment.setFoodItems(foodItems.toArray(new CharSequence[foodItems.size()]));
         dialogFragment.show(getFragmentManager(), "dialogFragment");
-        textView.setText("You have chosen: " + dialogFragment.getSelectedItem());
+
 
       } else {
         Log.e(TAG, "Clarifai: " + result.getStatusMessage());
@@ -162,6 +168,26 @@ public class RecognitionActivity extends FragmentActivity {
   }
 
 
+  @Override
+  public void onDialogPositiveClick(DialogFragment dialog) {
+    String chosenFood = dialogFragment.getSelectedItem();
+    if (chosenFood.equals(RecognitionActivity.OTHER_TEXT))
+    {
+      otherFoodDialogFragment = new NameOtherDialogFragment();
+      otherFoodDialogFragment.show(getFragmentManager(), "otherFoodDialogFragment");
+      chosenFood = otherFoodDialogFragment.getOtherFood();
+    }
+    textView.setText("You have chosen: " + chosenFood);
+  }
+
+  @Override
+  public void onOtherDialogClick(DialogFragment dialog)
+  {
+      String chosenFood = otherFoodDialogFragment.getOtherFood();
+      System.out.println("HELLO WORLD");
+      System.out.println(chosenFood);
+      textView.setText("You have chosen: " + chosenFood);
+  }
 }
 
 
