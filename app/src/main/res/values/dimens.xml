@@ -5,5 +5,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="nav_header_padding">16dp</dimen>
-    <dimen name="nav_header_height">100dp</dimen>
+    <dimen name="nav_header_height">120dp</dimen>
 </resources>

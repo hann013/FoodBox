@@ -4,16 +4,16 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/my_food"
-            android:icon="@drawable/ic_menu_food"
+            android:icon="@drawable/ic_menu_my_food"
             android:title="My Food" />
         <item
-            android:id="@+id/friends_food"
-            android:icon="@drawable/ic_menu_share"
-            android:title="Add Friend" />
-        <item
             android:id="@+id/add_friend"
-            android:icon="@drawable/ic_menu_send"
-            android:title="Friend's Food" />
+            android:icon="@drawable/ic_menu_friends_food"
+            android:title="Friends' Food" />
+        <item
+            android:id="@+id/friends_food"
+            android:icon="@drawable/ic_menu_signout"
+            android:title="Sign Out" />
     </group>
 
 

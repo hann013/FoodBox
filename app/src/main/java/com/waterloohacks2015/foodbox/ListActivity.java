@@ -1,6 +1,7 @@
 package com.waterloohacks2015.foodbox;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,7 +16,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.firebase.client.Firebase;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -24,9 +28,14 @@ import java.util.Locale;
 
 public class ListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    public static final String USER_ID = "USER_ID";
+    public static final String USER_EMAIL = "USER_EMAIL";
+    public static final String FIREBASE_URI = "https://foodbox.firebaseio.com";
 
     private final int IMAGE_CAPTURE_REQUEST_CODE = 100;
     private Uri photoUri;
+    private String userEmail;
+    private Firebase ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +60,16 @@ public class ListActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // initialize Firebase
+        Firebase.setAndroidContext(getApplicationContext());
+        ref = new Firebase(FIREBASE_URI);
+
+        // Set user email in nav bar
+        SharedPreferences prefs = getSharedPreferences(getApplication().getPackageName(), MODE_PRIVATE);
+        userEmail = prefs.getString(USER_EMAIL, "");
+        TextView drawerEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.drawer_email);
+        drawerEmail.setText(userEmail);
     }
 
     @Override

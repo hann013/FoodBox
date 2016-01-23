@@ -19,7 +19,7 @@
         android:src="@android:drawable/sym_def_app_icon" />
 
     <TextView
-        android:id="@+id/displayName"
+        android:id="@+id/drawer_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/profilePicture"
@@ -29,10 +29,10 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
     <TextView
-        android:id="@+id/userName"
+        android:id="@+id/drawer_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/displayName"
+        android:layout_below="@+id/drawer_name"
         android:layout_toEndOf="@+id/profilePicture"
         android:paddingStart="@dimen/nav_header_padding"
         android:text="food_lover" />
