@@ -1,14 +1,11 @@
 package com.waterloohacks2015.foodbox;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -28,8 +25,7 @@ import java.util.Locale;
 public class ListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private final int REQUEST_CODE = 100;
-    private final String APP_NAME = "FoodBox";
+    private final int IMAGE_CAPTURE_REQUEST_CODE = 100;
     private Uri photoUri;
 
     @Override
@@ -95,17 +91,11 @@ public class ListActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.my_food) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.friends_food) {
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.add_friend) {
 
         }
 
@@ -118,33 +108,35 @@ public class ListActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            // Image captured and saved to fileUri specified in the Intent
-            Toast.makeText(this, "Image saved to:\n" + photoUri, Toast.LENGTH_LONG).show();
+        if (requestCode == IMAGE_CAPTURE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                // Image captured and saved to fileUri specified in the Intent
+                Toast.makeText(this, "Image saved to:\n" + photoUri, Toast.LENGTH_LONG).show();
 
-            Intent openPictureIntent = new Intent(Intent.ACTION_VIEW);
-            openPictureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            openPictureIntent.setDataAndType(photoUri, "image/jpeg");
-            startActivity(openPictureIntent);
-        } else if (resultCode == RESULT_CANCELED) {
-            // Do nothing
-        } else {
-            // Image capture failed
-            Toast.makeText(this, "Image capture failed", Toast.LENGTH_LONG).show();
+                Intent openPictureIntent = new Intent(Intent.ACTION_VIEW);
+                openPictureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                openPictureIntent.setDataAndType(photoUri, "image/jpeg");
+                startActivity(openPictureIntent);
+            } else if (resultCode == RESULT_CANCELED) {
+                // Do nothing
+            } else {
+                // Image capture failed
+                Toast.makeText(this, "Image capture failed", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
     private void takePicture() {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         photoUri = getOutputFileUri();
-        Log.d("ListActivity", photoUri.toString());
-        //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-        startActivityForResult(cameraIntent, REQUEST_CODE);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+        startActivityForResult(cameraIntent, IMAGE_CAPTURE_REQUEST_CODE);
     }
 
     private Uri getOutputFileUri() {
         File photoDir = new File(
-                this.getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_NAME);
+                this.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                getResources().getString(R.string.app_name));
 
         // Create the storage directory if it does not exist
         if (!photoDir.exists()){

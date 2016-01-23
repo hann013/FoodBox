@@ -14,7 +14,7 @@
         completions."
     </string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_activity_list">ListActivity</string>
+    <string name="title_activity_list">FoodBox</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
