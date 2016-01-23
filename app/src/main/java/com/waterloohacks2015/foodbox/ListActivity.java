@@ -1,14 +1,12 @@
 package com.waterloohacks2015.foodbox;
 
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,7 +16,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.firebase.client.Firebase;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -27,10 +28,14 @@ import java.util.Locale;
 
 public class ListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    public static final String USER_ID = "USER_ID";
+    public static final String USER_EMAIL = "USER_EMAIL";
+    public static final String FIREBASE_URI = "https://foodbox.firebaseio.com";
+    public static final int IMAGE_CAPTURE_REQUEST_CODE = 100;
 
-    private final int REQUEST_CODE = 100;
-    private final String APP_NAME = "FoodBox";
     private Uri photoUri;
+    private String userEmail;
+    private Firebase ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +48,9 @@ public class ListActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                takePicture();
+                photoUri = getOutputFileUri();
+                AddFoodDialogFragment dialog = AddFoodDialogFragment.newInstance(photoUri);
+                dialog.show(getFragmentManager(), "AddFoodDialog");
             }
         });
 
@@ -55,6 +62,16 @@ public class ListActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // initialize Firebase
+        Firebase.setAndroidContext(getApplicationContext());
+        ref = new Firebase(FIREBASE_URI);
+
+        // Set user email in nav bar
+        SharedPreferences prefs = getSharedPreferences(getApplication().getPackageName(), MODE_PRIVATE);
+        userEmail = prefs.getString(USER_EMAIL, "");
+        TextView drawerEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.drawer_email);
+        drawerEmail.setText(userEmail);
     }
 
     @Override
@@ -67,45 +84,17 @@ public class ListActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.list, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.my_food) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.friends_food) {
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.add_friend) {
 
         }
 
@@ -118,33 +107,27 @@ public class ListActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            // Image captured and saved to fileUri specified in the Intent
-            Toast.makeText(this, "Image saved to:\n" + photoUri, Toast.LENGTH_LONG).show();
+        if (requestCode == IMAGE_CAPTURE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                // Image captured and saved to fileUri specified in the Intent
+                //Toast.makeText(this, "Image saved to:\n" + photoUri, Toast.LENGTH_LONG).show();
 
-            Intent openPictureIntent = new Intent(Intent.ACTION_VIEW);
-            openPictureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            openPictureIntent.setDataAndType(photoUri, "image/jpeg");
-            startActivity(openPictureIntent);
-        } else if (resultCode == RESULT_CANCELED) {
-            // Do nothing
-        } else {
-            // Image capture failed
-            Toast.makeText(this, "Image capture failed", Toast.LENGTH_LONG).show();
+                Intent launchRecognitionIntent = new Intent(this, RecognitionActivity.class);
+                launchRecognitionIntent.putExtra(RecognitionActivity.INPUT_URI, photoUri);
+                startActivity(launchRecognitionIntent);
+            } else if (resultCode == RESULT_CANCELED) {
+                // Do nothing
+            } else {
+                // Image capture failed
+                Toast.makeText(this, "Image capture failed", Toast.LENGTH_LONG).show();
+            }
         }
-    }
-
-    private void takePicture() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        photoUri = getOutputFileUri();
-        Log.d("ListActivity", photoUri.toString());
-        //cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-        startActivityForResult(cameraIntent, REQUEST_CODE);
     }
 
     private Uri getOutputFileUri() {
         File photoDir = new File(
-                this.getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_NAME);
+                this.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                getResources().getString(R.string.app_name));
 
         // Create the storage directory if it does not exist
         if (!photoDir.exists()){
