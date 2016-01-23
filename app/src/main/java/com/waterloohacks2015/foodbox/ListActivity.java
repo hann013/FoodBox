@@ -130,12 +130,11 @@ public class ListActivity extends AppCompatActivity
         if (requestCode == IMAGE_CAPTURE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 // Image captured and saved to fileUri specified in the Intent
-                Toast.makeText(this, "Image saved to:\n" + photoUri, Toast.LENGTH_LONG).show();
+                //Toast.makeText(this, "Image saved to:\n" + photoUri, Toast.LENGTH_LONG).show();
 
-                Intent openPictureIntent = new Intent(Intent.ACTION_VIEW);
-                openPictureIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                openPictureIntent.setDataAndType(photoUri, "image/jpeg");
-                startActivity(openPictureIntent);
+                Intent launchRecognitionIntent = new Intent(this, RecognitionActivity.class);
+                launchRecognitionIntent.putExtra(RecognitionActivity.INPUT_URI, photoUri);
+                startActivity(launchRecognitionIntent);
             } else if (resultCode == RESULT_CANCELED) {
                 // Do nothing
             } else {

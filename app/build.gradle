@@ -39,4 +39,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'com.firebase:firebase-client-android:2.5.0+'
+    compile 'com.clarifai:clarifai-api-java:1.2.0'
 }
