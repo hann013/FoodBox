@@ -1,0 +1,74 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:background = "#FFFFFF">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Enter your food"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#A4C639" />
+
+    <TextView
+        android:id="@+id/foodName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/title"
+        android:layout_marginTop="23dp"
+        android:text="Food Name:"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#0099FF" />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/foodName"
+        android:layout_toRightOf="@+id/foodName"
+        android:background="#CCCCCC"
+        android:ems="10"
+        android:inputType="textPersonName" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/expirationDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/foodName"
+        android:layout_marginTop="23dp"
+        android:text="Expiration Date:"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#0099FF" />
+
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/expirationDate"
+        android:layout_marginTop="20dp"
+        android:background="#0099FF"
+        android:text="Done"
+        android:textColor="#FFFFFF" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:ems="10"
+        android:id="@+id/date"
+        android:layout_toEndOf="@+id/expirationDate"
+        android:layout_alignTop="@+id/expirationDate" />
+
+</RelativeLayout>
