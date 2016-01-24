@@ -20,14 +20,24 @@ public class FoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxItem> {
     }
 
     @Override
-    protected void populateView(View v, FoodBoxItem item) {
+    protected void populateView(View v, FoodBoxItem item, String key) {
         String itemName = item.getFoodName();
-        String expiryDate = ListActivity.expiryDateDisplay.format(new Date(item.getExpirationDate()));
+        Date expiryDate = new Date(item.getExpirationDate());
+
+        String expiryDateFormatted = ListActivity.expiryDateDisplay.format(expiryDate);
+        long daysAway = (expiryDate.getTime() - System.currentTimeMillis()) / (24 * 60 * 60 * 1000);
 
         TextView itemNameView = (TextView) v.findViewById(R.id.foodName);
         itemNameView.setText(itemName);
 
         TextView expiryDateView = (TextView) v.findViewById(R.id.expirationDate);
-        expiryDateView.setText("Expires: " + expiryDate);
+        if (daysAway == 0) {
+            expiryDateView.setText(String.format("%s (today!)", expiryDateFormatted));
+        } else {
+            expiryDateView.setText(String.format("%s (%d days)", expiryDateFormatted, daysAway));
+        }
+
+        TextView itemKey = (TextView) v.findViewById(R.id.itemKey);
+        itemKey.setText(key);
     }
 }

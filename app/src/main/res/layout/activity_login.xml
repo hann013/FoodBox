@@ -9,6 +9,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.waterloohacks2015.foodbox.LoginActivity">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="125dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/logo"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="20dp"/>
     <EditText
         android:id="@+id/user_email"
         android:layout_width="match_parent"
@@ -18,17 +25,23 @@
     <EditText
         android:id="@+id/user_password"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height=  "wrap_content"
         android:inputType="textPassword"
         android:hint="Password" />
-    <Button
-        android:id="@+id/login_button"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login"/>
-    <Button
-        android:id="@+id/signup_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sign Up"/>
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="10dp">
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login"/>
+        <Button
+            android:id="@+id/signup_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign Up"/>
+    </LinearLayout>
 </LinearLayout>

@@ -50,7 +50,6 @@ public class RecognitionActivity extends FragmentActivity {
     private ImageView foodImage;
     private Spinner foodNameSpinner;
     private TextView expiryDate;
-    ExpiryDaysFragment expiryDatePicker;
     private Button saveButton;
 
     private String userName;

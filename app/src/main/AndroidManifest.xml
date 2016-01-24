@@ -29,8 +29,8 @@
         </activity>
         <activity
             android:name=".ListActivity"
-            android:label="@string/title_activity_list"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="My Food"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".NewFood"
             android:label="@string/title_New_Food" />
