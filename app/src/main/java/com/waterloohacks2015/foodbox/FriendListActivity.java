@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -53,6 +54,11 @@ public class FriendListActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Set user email in nav bar
+        TextView drawerEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.drawer_email);
+        drawerEmail.setText(userEmail);
+
     }
 
     @Override
