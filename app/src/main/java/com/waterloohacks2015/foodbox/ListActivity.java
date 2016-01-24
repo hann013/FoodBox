@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.text.format.Time;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,7 +20,10 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -32,9 +36,11 @@ public class ListActivity extends AppCompatActivity
     public static final String FIREBASE_URI = "https://foodbox.firebaseio.com";
     public static final int IMAGE_CAPTURE_REQUEST_CODE = 100;
 
+    private ValueEventListener originalListener;
     private Uri photoUri;
     private String userEmail;
     private Firebase ref;
+    private Firebase userRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +77,41 @@ public class ListActivity extends AppCompatActivity
         userEmail = prefs.getString(USER_EMAIL, "");
         TextView drawerEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.drawer_email);
         drawerEmail.setText(userEmail);
+
+        //username no email
+        String userName = userEmail.split("@")[0];
+        System.out.println(userName);
+        //get firebase ref
+        userRef = ref.child("users").child(userName);
+        System.out.println(userRef.toString());
+
+        //{"FoodBoxItem": {"expirationDate": 1453599939, "foodName": "apple", "isPublic": true}}
+        Time now = new Time();
+        now.setToNow();
+        userRef.push().setValue(new FoodBoxItem("apple", now.toMillis(true), true));
+        userRef.push().setValue(new FoodBoxItem("apple", now.toMillis(true), true));
+        userRef.addValueEventListener(originalListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                System.out.println("There are " + snapshot.getChildrenCount() + " foodBoxItems");
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    FoodBoxItem foodBoxItem = postSnapshot.getValue(FoodBoxItem.class);
+                    System.out.println(foodBoxItem.getFoodName() +
+                            " - " + foodBoxItem.getExpirationDate() + "-" + foodBoxItem.getIsPublic());
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ref.removeEventListener(originalListener);
     }
 
     @Override
