@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -24,12 +25,18 @@
         <activity
             android:name=".ListActivity"
             android:label="@string/title_activity_list"></activity>
+
         <activity
             android:name=".NewFood"
-            android:label="@string/title_New_Food"></activity>
+            android:label="@string/title_New_Food">
+        </activity>
+
         <activity
             android:name=".NotificationActivity"
             android:label="@string/title_NotificationActivity"></activity>
+
+        <!--<receiver android:name=".NotificationPublisher" />-->
+
     </application>
 
 </manifest>
