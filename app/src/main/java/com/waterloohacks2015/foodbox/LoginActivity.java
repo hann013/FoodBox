@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
-    public static final String USER_ID = "USER_ID";
     private Firebase ref;
 
     @Override
@@ -55,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAuthenticated(AuthData authData) {
                 // save user id to SharedPreferences
-                saveUserIdAndEmail(authData.getUid(), email);
+                saveUserIdAndEmail(email);
                 redirectToList();
             }
 
@@ -72,13 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Map<String, Object> result) {
                 // save user email in database and SharedPreferences
-                String userId = result.get("uid").toString();
-
-                Firebase newUserRef = ref.child("users").child(userId);
-                FoodBoxUser newUser = new FoodBoxUser(email);
-                newUserRef.setValue(newUser);
-
-                saveUserIdAndEmail(userId, email);
+                saveUserIdAndEmail(email);
 
                 redirectToList();
             }
@@ -91,10 +84,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void saveUserIdAndEmail(String userId, String userEmail) {
+    private void saveUserIdAndEmail(String userEmail) {
         // save user id and email to SharedPreferences
         SharedPreferences.Editor prefs = getSharedPreferences(getApplication().getPackageName(), MODE_PRIVATE).edit();
-        prefs.putString(USER_ID, userId);
         prefs.putString(ListActivity.USER_EMAIL, userEmail);
         prefs.apply();
     }
