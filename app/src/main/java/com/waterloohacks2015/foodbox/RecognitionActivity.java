@@ -1,6 +1,11 @@
 package com.waterloohacks2015.foodbox;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.app.TaskStackBuilder;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -8,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -27,11 +33,13 @@ import com.clarifai.api.Tag;
 import com.clarifai.api.exception.ClarifaiException;
 import com.firebase.client.Firebase;
 import com.waterloohacks2015.foodbox.expirydatepicker.ExpiryDaysFragment;
+import com.waterloohacks2015.foodbox.recipelist.RecipeList;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple Activity that performs recognition using the Clarifai API.
@@ -128,6 +136,12 @@ public class RecognitionActivity extends FragmentActivity {
                     FoodBoxItem newItem = new FoodBoxItem(newItemName, newItemExpiryDate, false, userName);
                     Firebase userRef = new Firebase(ListActivity.FIREBASE_URI).child("items");
                     userRef.push().setValue(newItem);
+
+                    long millisDelay = newItemExpiryDate - System.currentTimeMillis() - 2*(24 * 60 * 60 * 1000);
+                    //testing 30 seconds
+                    millisDelay = 30 * 1000;
+                    scheduleNotification(getNewNotification(newItemName), millisDelay);
+
                 } catch (ParseException e) {
                     Toast.makeText(RecognitionActivity.this, "Error saving item.", Toast.LENGTH_SHORT).show();
                 } finally {
@@ -238,6 +252,38 @@ public class RecognitionActivity extends FragmentActivity {
                 // do nothing
             }
         });
+    }
+
+    private void scheduleNotification(Notification notification, long delay) {
+        Intent notificationIntent = new Intent(this, NotificationPublisher.class);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    private Notification getNewNotification(String itemName) {
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle("Food Expiring Soon");
+        builder.setContentText(itemName + " expires in two days. Click for healthy recipes to cook before it goes to waste!");
+        builder.setSmallIcon(R.drawable.ic_launcher);
+
+        // view recipes action
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(RecipeList.class);
+
+        Intent resultIntent = new Intent(this, RecipeList.class);
+        resultIntent.putExtra(ListActivity.INGREDIENT_NAME, itemName);
+
+        // Adds the Intent that starts the Activity to the top of the stack
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+        builder.setContentIntent(resultPendingIntent);
+
+        return builder.build();
     }
 }
 
