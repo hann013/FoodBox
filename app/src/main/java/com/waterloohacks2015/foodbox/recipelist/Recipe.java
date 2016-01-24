@@ -1,4 +1,4 @@
-package com.example.lagarwal.foodbox;
+package com.waterloohacks2015.foodbox.recipelist;
 
 import java.io.Serializable;
 import java.util.List;

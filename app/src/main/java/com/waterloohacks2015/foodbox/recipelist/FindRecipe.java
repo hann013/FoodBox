@@ -1,5 +1,7 @@
-package com.example.lagarwal.foodbox;
+package com.waterloohacks2015.foodbox.recipelist;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -27,9 +29,12 @@ import java.util.List;
 public class FindRecipe extends AsyncTask<String, Void, List<Recipe>> {
 
     String responseString;
+    Activity activity;
     SimpleAdapter adpt;
+    ProgressDialog _progressDialog;
 
-    public FindRecipe(SimpleAdapter adpt){
+    public FindRecipe(Activity activity, SimpleAdapter adpt){
+        this.activity = activity;
         this.adpt=adpt;
     }
 
@@ -38,11 +43,17 @@ public class FindRecipe extends AsyncTask<String, Void, List<Recipe>> {
         super.onPostExecute(result);
         adpt.setItemList(result);
         adpt.notifyDataSetChanged();
+        _progressDialog.hide();
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        _progressDialog = new ProgressDialog(activity);
+        _progressDialog.setMessage("Fetching recipes...");
+        _progressDialog.setCancelable(false);
+        _progressDialog.setInverseBackgroundForced(false);
+        _progressDialog.show();
     }
 
     @Override
@@ -92,6 +103,7 @@ public class FindRecipe extends AsyncTask<String, Void, List<Recipe>> {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+
         }
         return result;
     }

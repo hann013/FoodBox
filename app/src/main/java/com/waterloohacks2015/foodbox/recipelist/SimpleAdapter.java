@@ -1,5 +1,6 @@
-package com.example.lagarwal.foodbox;
+package com.waterloohacks2015.foodbox.recipelist;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import com.waterloohacks2015.foodbox.R;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -120,6 +123,9 @@ public class SimpleAdapter extends ArrayAdapter<Recipe> {
 
     public void setItemList(List<Recipe> itemList) {
         this.itemList = itemList;
+        if (itemList.size() == 0) {
+            ((Activity) context).findViewById(R.id.no_recipes_found).setVisibility(View.VISIBLE);
+        }
     }
 
 

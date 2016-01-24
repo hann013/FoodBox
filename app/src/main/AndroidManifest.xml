@@ -46,6 +46,10 @@
             android:name=".FriendListActivity"
             android:label="Friends' Food"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".recipelist.RecipeList"
+            android:label="Recipes"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
