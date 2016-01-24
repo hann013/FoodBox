@@ -29,16 +29,12 @@
             android:label="My Food"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".NewFood"
-            android:label="@string/title_New_Food" />
-        <activity
             android:name=".NotificationActivity"
             android:label="@string/title_NotificationActivity" />
         <activity
             android:name=".RecognitionActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"></activity>
+            android:label="Add New Item"></activity>
         <activity
             android:name=".FriendListActivity"
             android:label="Friends' Food"
