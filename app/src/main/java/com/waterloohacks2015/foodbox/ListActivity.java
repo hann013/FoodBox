@@ -64,7 +64,6 @@ public class ListActivity extends AppCompatActivity
                 dialog.show(getFragmentManager(), "AddFoodDialog");
             }
         });
-        fab.bringToFront();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

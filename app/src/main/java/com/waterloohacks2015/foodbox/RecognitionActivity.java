@@ -49,6 +49,7 @@ public class RecognitionActivity extends FragmentActivity {
     private final ClarifaiClient client = new ClarifaiClient(APP_ID, APP_SECRET);
     private ImageView foodImage;
     private Spinner foodNameSpinner;
+    private EditText customFoodName;
     private TextView expiryDate;
     private Button saveButton;
 
@@ -62,6 +63,7 @@ public class RecognitionActivity extends FragmentActivity {
         setContentView(R.layout.activity_recognition);
         foodImage = (ImageView) findViewById(R.id.food_image);
         foodNameSpinner = (Spinner) findViewById(R.id.food_name);
+        customFoodName = (EditText) findViewById(R.id.food_name_custom);
         expiryDate = (TextView) findViewById(R.id.expiry_date);
         saveButton = (Button) findViewById(R.id.save_button);
 
@@ -70,30 +72,37 @@ public class RecognitionActivity extends FragmentActivity {
         userName = prefs.getString(ListActivity.USER_EMAIL, "").split("@")[0];
 
         //launch api
-        Uri photoUri = getIntent().getExtras().getParcelable(RecognitionActivity.INPUT_URI);
-        Log.d(TAG, "User picked image: " + photoUri);
-        Bitmap bitmap = loadBitmapFromUri(photoUri);
-        if (bitmap != null) {
-            foodImage.setImageBitmap(bitmap);
-            _progressDialog = new ProgressDialog(this);
-            _progressDialog.setMessage("Interpreting...");
-            _progressDialog.setCancelable(false);
-            _progressDialog.setInverseBackgroundForced(false);
-            _progressDialog.show();
+        if (getIntent().getExtras() != null) {
+            Uri photoUri = getIntent().getExtras().getParcelable(RecognitionActivity.INPUT_URI);
+            // load user image
+            Log.d(TAG, "User picked image: " + photoUri);
+            Bitmap bitmap = loadBitmapFromUri(photoUri);
+            if (bitmap != null) {
+                foodImage.setImageBitmap(bitmap);
+                _progressDialog = new ProgressDialog(this);
+                _progressDialog.setMessage("Interpreting...");
+                _progressDialog.setCancelable(false);
+                _progressDialog.setInverseBackgroundForced(false);
+                _progressDialog.show();
 
-            // Run recognition on a background thread since it makes a network call.
-            new AsyncTask<Bitmap, Void, RecognitionResult>() {
-                @Override
-                protected RecognitionResult doInBackground(Bitmap... bitmaps) {
-                    return recognizeBitmap(bitmaps[0]);
-                }
+                // Run recognition on a background thread since it makes a network call.
+                new AsyncTask<Bitmap, Void, RecognitionResult>() {
+                    @Override
+                    protected RecognitionResult doInBackground(Bitmap... bitmaps) {
+                        return recognizeBitmap(bitmaps[0]);
+                    }
 
-                @Override
-                protected void onPostExecute(RecognitionResult result) {
-                    updateUIForResult(result);
-                    _progressDialog.hide();
-                }
-            }.execute(bitmap);
+                    @Override
+                    protected void onPostExecute(RecognitionResult result) {
+                        updateUIForResult(result);
+                        _progressDialog.hide();
+                    }
+                }.execute(bitmap);
+            }
+        } else {
+            foodImage.setVisibility(View.GONE);
+            foodNameSpinner.setVisibility(View.GONE);
+            customFoodName.setVisibility(View.VISIBLE);
         }
     }
 
@@ -184,7 +193,6 @@ public class RecognitionActivity extends FragmentActivity {
         foodNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                EditText customFoodName = (EditText) findViewById(R.id.food_name_custom);
                 // selected "Custom"
                 if (position == listSize - 1) {
                     customFoodName.setVisibility(View.VISIBLE);
@@ -212,7 +220,7 @@ public class RecognitionActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 String newItemName = (String) foodNameSpinner.getSelectedItem();
-                if (newItemName.equals("Custom")) {
+                if (newItemName == null || newItemName.equals("Custom")) {
                     newItemName = ((EditText) findViewById(R.id.food_name_custom)).getText().toString();
                 }
 
