@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".RecognitionActivity">
+    tools:context=".RecognitionActivity"
+    android:focusableInTouchMode="true">
 
     <ImageView
         android:id="@+id/food_image"
@@ -48,6 +49,7 @@
             android:layout_toEndOf="@+id/food_name_icon"
             android:paddingLeft="5dp"
             android:hint="Food name"
+            android:singleLine="true"
             android:visibility="gone" />
     </RelativeLayout>
 

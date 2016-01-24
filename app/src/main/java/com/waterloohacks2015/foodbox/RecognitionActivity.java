@@ -104,6 +104,37 @@ public class RecognitionActivity extends FragmentActivity {
             foodNameSpinner.setVisibility(View.GONE);
             customFoodName.setVisibility(View.VISIBLE);
         }
+
+        // set datepicker dialog listener for expiry date
+        expiryDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ExpiryDaysFragment().show(getSupportFragmentManager(), "ExpiryDatePicker");
+            }
+        });
+
+        // add onClickListener for save button
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newItemName = (String) foodNameSpinner.getSelectedItem();
+                if (newItemName == null || newItemName.equals("Custom")) {
+                    newItemName = ((EditText) findViewById(R.id.food_name_custom)).getText().toString();
+                }
+
+                try {
+                    long newItemExpiryDate = ListActivity.expiryDateDisplay.parse(expiryDate.getText().toString()).getTime();
+                    FoodBoxItem newItem = new FoodBoxItem(newItemName, newItemExpiryDate, false, userName);
+                    Firebase userRef = new Firebase(ListActivity.FIREBASE_URI).child("items");
+                    userRef.push().setValue(newItem);
+                } catch (ParseException e) {
+                    Toast.makeText(RecognitionActivity.this, "Error saving item.", Toast.LENGTH_SHORT).show();
+                } finally {
+                    // return to ListActivity
+                    startActivity(new Intent(RecognitionActivity.this, ListActivity.class));
+                }
+            }
+        });
     }
 
     /**
@@ -204,37 +235,6 @@ public class RecognitionActivity extends FragmentActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // do nothing
-            }
-        });
-
-        // set datepicker dialog listener for expiry date
-        expiryDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new ExpiryDaysFragment().show(getSupportFragmentManager(), "ExpiryDatePicker");
-            }
-        });
-
-        // add onClickListener for save button
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String newItemName = (String) foodNameSpinner.getSelectedItem();
-                if (newItemName == null || newItemName.equals("Custom")) {
-                    newItemName = ((EditText) findViewById(R.id.food_name_custom)).getText().toString();
-                }
-
-                try {
-                    long newItemExpiryDate = ListActivity.expiryDateDisplay.parse(expiryDate.getText().toString()).getTime();
-                    FoodBoxItem newItem = new FoodBoxItem(newItemName, newItemExpiryDate, false, userName);
-                    Firebase userRef = new Firebase(ListActivity.FIREBASE_URI).child("items");
-                    userRef.push().setValue(newItem);
-                } catch (ParseException e) {
-                    Toast.makeText(RecognitionActivity.this, "Error saving item.", Toast.LENGTH_SHORT).show();
-                } finally {
-                    // return to ListActivity
-                    startActivity(new Intent(RecognitionActivity.this, ListActivity.class));
-                }
             }
         });
     }

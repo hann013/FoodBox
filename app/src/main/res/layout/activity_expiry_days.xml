@@ -15,12 +15,6 @@
         android:padding="20dp">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Expiry Date"
-            android:textSize="25dp"/>
-
-        <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,9 +40,10 @@
             android:textSize="25dp" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/numberPicker1">
+            android:layout_below="@+id/numberPicker1"
+            android:paddingLeft="15dp">
             <Button
                 android:id="@+id/confirmButton"
                 android:layout_width="wrap_content"
@@ -59,7 +54,7 @@
                 android:id="@+id/expiryDateButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Choose expiry date" />
+                android:text="Choose date" />
         </LinearLayout>
 
     </RelativeLayout>
