@@ -65,10 +65,10 @@ public class ListActivity extends AppCompatActivity
         Log.d("This color is in main:", color);
         switch (color) {
             case "green":
-                toolbar.setBackgroundColor(Color.GREEN);
+                toolbar.setBackgroundColor(Color.parseColor("#008000"));
                 break;
             case "yellow":
-                toolbar.setBackgroundColor(Color.YELLOW);
+                toolbar.setBackgroundColor(Color.parseColor("#FFD700"));
                 break;
             case "red":
                 toolbar.setBackgroundColor(Color.RED);

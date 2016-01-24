@@ -1,8 +1,14 @@
 package com.waterloohacks2015.foodbox.listadapter;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -10,6 +16,7 @@ import android.widget.TextView;
 import com.firebase.client.Query;
 import com.waterloohacks2015.foodbox.FoodBoxItem;
 import com.waterloohacks2015.foodbox.ListActivity;
+import com.waterloohacks2015.foodbox.MainActivity;
 import com.waterloohacks2015.foodbox.R;
 import com.waterloohacks2015.foodbox.recipelist.RecipeList;
 
@@ -21,6 +28,8 @@ import java.util.Date;
 public class FoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxItem> {
     String myUserName;
     Activity currentActivity;
+    private Context context;
+
 
     public FoodBoxItemListAdapter(Query mRef, Activity activity, int layout, String username) {
         super(mRef, FoodBoxItem.class, layout, activity);
@@ -45,6 +54,7 @@ public class FoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxItem> {
         if (daysAway < 0) {
             expiryDateView.setText(String.format("%s (EXPIRED)", expiryDateFormatted));
         } else if (daysAway == 0) {
+
             expiryDateView.setText(String.format("%s (today!)", expiryDateFormatted));
         } else if (daysAway == 1) {
             expiryDateView.setText(String.format("%s (%d day)", expiryDateFormatted, daysAway));

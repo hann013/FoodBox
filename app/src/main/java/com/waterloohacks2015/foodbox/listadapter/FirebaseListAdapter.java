@@ -29,6 +29,8 @@ import java.util.List;
  */
 public abstract class FirebaseListAdapter<T> extends BaseAdapter {
 
+    public FirebaseListAdapter(){}
+
     private Query mRef;
     private Class<T> mModelClass;
     private int mLayout;

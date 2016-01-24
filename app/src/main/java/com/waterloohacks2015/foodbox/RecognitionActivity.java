@@ -73,7 +73,7 @@ public class RecognitionActivity extends FragmentActivity {
         customFoodName = (EditText) findViewById(R.id.food_name_custom);
         expiryDate = (TextView) findViewById(R.id.expiry_date);
         saveButton = (Button) findViewById(R.id.save_button);
-
+        
         // get user name
         SharedPreferences prefs = getSharedPreferences(getApplication().getPackageName(), MODE_PRIVATE);
         userName = prefs.getString(ListActivity.USER_EMAIL, "").split("@")[0];
