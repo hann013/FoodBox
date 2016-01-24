@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="5dip"
+    android:padding="15dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <Button
