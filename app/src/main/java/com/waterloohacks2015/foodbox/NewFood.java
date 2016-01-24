@@ -1,8 +1,14 @@
 package com.waterloohacks2015.foodbox;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -62,10 +68,30 @@ public class NewFood extends Activity implements View.OnClickListener{
                 } else {
                     Toast.makeText(NewFood.this, "Try Again", Toast.LENGTH_SHORT).show();
                 }
-
+                scheduleNotification(getNotification("5 s delay"), 300000);
                 finish();
             }
         });
+    }
+
+    private void scheduleNotification(Notification notification, int delay) {
+
+        Intent notificationIntent = new Intent(this, NotificationActivity.class);
+        notificationIntent.putExtra(NotificationActivity.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(NotificationActivity.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long futureInMillis = SystemClock.elapsedRealtime() + delay;
+        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    private Notification getNotification(String content) {
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle("Scheduled Notification");
+        builder.setContentText(content);
+        builder.setSmallIcon(R.drawable.ic_launcher);
+        return builder.build();
     }
 
 
