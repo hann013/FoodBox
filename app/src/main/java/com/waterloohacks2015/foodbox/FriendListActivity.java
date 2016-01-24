@@ -59,6 +59,13 @@ public class FriendListActivity extends AppCompatActivity
         TextView drawerEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.drawer_email);
         drawerEmail.setText(userEmail);
 
+        // If started by intent
+        if (getIntent().getExtras() != null) {
+            String itemId = getIntent().getExtras().getString(ListActivity.ITEM_ID);
+            Firebase itemRef = new Firebase(ListActivity.FIREBASE_URI).child("items").child(itemId);
+            itemRef.child("isPublic").setValue(true);
+        }
+
     }
 
     @Override

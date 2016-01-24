@@ -39,7 +39,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple Activity that performs recognition using the Clarifai API.
@@ -134,13 +133,13 @@ public class RecognitionActivity extends FragmentActivity {
                 try {
                     long newItemExpiryDate = ListActivity.expiryDateDisplay.parse(expiryDate.getText().toString()).getTime();
                     FoodBoxItem newItem = new FoodBoxItem(newItemName, newItemExpiryDate, false, userName);
-                    Firebase userRef = new Firebase(ListActivity.FIREBASE_URI).child("items");
-                    userRef.push().setValue(newItem);
+                    Firebase newItemRef = new Firebase(ListActivity.FIREBASE_URI).child("items").push();
+                    newItemRef.setValue(newItem);
 
                     long millisDelay = newItemExpiryDate - System.currentTimeMillis() - 2*(24 * 60 * 60 * 1000);
                     //testing 30 seconds
-                    millisDelay = 30 * 1000;
-                    scheduleNotification(getNewNotification(newItemName), millisDelay);
+                    millisDelay = 10000;
+                    scheduleNotification(getNewNotification(newItemRef.getKey(), newItemName), millisDelay);
 
                 } catch (ParseException e) {
                     Toast.makeText(RecognitionActivity.this, "Error saving item.", Toast.LENGTH_SHORT).show();
@@ -265,23 +264,35 @@ public class RecognitionActivity extends FragmentActivity {
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
     }
 
-    private Notification getNewNotification(String itemName) {
-        Notification.Builder builder = new Notification.Builder(this);
-        builder.setContentTitle("Food Expiring Soon");
-        builder.setContentText(itemName + " expires in two days. Click for healthy recipes to cook before it goes to waste!");
-        builder.setSmallIcon(R.drawable.ic_launcher);
+    private Notification getNewNotification(String itemKey, String itemName) {
+        Notification.Builder builder = new Notification.Builder(this)
+        .setContentTitle("Food Expiring Soon")
+        .setContentText(itemName + " expires in two days.")
+        .setSmallIcon(R.drawable.ic_menu_friends_food)
+        .setAutoCancel(true);
+
+        // make visible action
+        Intent visibilityIntent = new Intent(this, FriendListActivity.class);
+        visibilityIntent.putExtra(ListActivity.ITEM_ID, itemKey);
+
+        PendingIntent visibilityPendingIntent = PendingIntent.getActivity(this, 0, visibilityIntent, 0);
+        builder.addAction(R.drawable.ic_visible_button, "Make Public", visibilityPendingIntent);
 
         // view recipes action
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(RecipeList.class);
+        TaskStackBuilder rStackBuilder = TaskStackBuilder.create(this);
+        rStackBuilder.addParentStack(RecipeList.class);
 
-        Intent resultIntent = new Intent(this, RecipeList.class);
-        resultIntent.putExtra(ListActivity.INGREDIENT_NAME, itemName);
+        Intent recipesIntent = new Intent(this, RecipeList.class);
+        recipesIntent.putExtra(ListActivity.INGREDIENT_NAME, itemName);
 
         // Adds the Intent that starts the Activity to the top of the stack
-        stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(resultPendingIntent);
+        rStackBuilder.addNextIntent(recipesIntent);
+        PendingIntent recipesPendingIntent = rStackBuilder.getPendingIntent(0,PendingIntent.FLAG_UPDATE_CURRENT);
+
+        builder.addAction(R.drawable.ic_recipe_button, "View Recipes", recipesPendingIntent);
+
+        Intent showListIntent = new Intent(this, ListActivity.class);
+        builder.setContentIntent(PendingIntent.getActivity(this, 0, showListIntent, 0));
 
         return builder.build();
     }

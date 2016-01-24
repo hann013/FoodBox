@@ -42,11 +42,10 @@
         <activity
             android:name=".recipelist.RecipeList"
             android:label="Recipes"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ListActivity"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".ListActivity" >
         </activity>
+        <service android:name=".VisibilityUpdateService"></service>
         <receiver android:name=".NotificationPublisher"></receiver>
     </application>
 

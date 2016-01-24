@@ -28,7 +28,6 @@ public class FriendFoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxIte
         String itemName = item.getFoodName();
         Date expiryDate = new Date(item.getExpirationDate());
 
-
         v.setVisibility(View.VISIBLE);
         String expiryDateFormatted = ListActivity.expiryDateDisplay.format(expiryDate);
         long daysAway = (expiryDate.getTime() - System.currentTimeMillis()) / (24 * 60 * 60 * 1000);
@@ -52,11 +51,10 @@ public class FriendFoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxIte
         TextView itemKey = (TextView) v.findViewById(R.id.friend_itemKey);
         itemKey.setText(key);
 
-
         v.setVisibility(View.VISIBLE);
         v.setLayoutParams(new AbsListView.LayoutParams(-1, -2));
 
-        if (userName.equals(userNameToExclude))
+        if (!item.getIsPublic())
         {
             v.setVisibility(View.GONE);
             v.setLayoutParams(new AbsListView.LayoutParams(-1, 1));
