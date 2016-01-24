@@ -54,7 +54,7 @@ public class FriendFoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxIte
         v.setVisibility(View.VISIBLE);
         v.setLayoutParams(new AbsListView.LayoutParams(-1, -2));
 
-        if (!item.getIsPublic())
+        if (userName.equals(userNameToExclude))
         {
             v.setVisibility(View.GONE);
             v.setLayoutParams(new AbsListView.LayoutParams(-1, 1));

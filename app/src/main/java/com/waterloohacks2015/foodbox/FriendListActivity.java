@@ -66,6 +66,7 @@ public class FriendListActivity extends AppCompatActivity
             String itemId = getIntent().getExtras().getString(ListActivity.ITEM_ID);
             Firebase itemRef = new Firebase(ListActivity.FIREBASE_URI).child("items").child(itemId);
             itemRef.child("isPublic").setValue(true);
+            getIntent().removeExtra(ListActivity.ITEM_ID);
         }
 
     }
