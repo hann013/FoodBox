@@ -121,11 +121,14 @@ public class ListActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        System.out.println("nav clicked");
         int id = item.getItemId();
 
         if (id == R.id.my_food) {
 
         } else if (id == R.id.friends_food) {
+            Intent intent = new Intent(this, FriendListActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.add_friend) {
 
