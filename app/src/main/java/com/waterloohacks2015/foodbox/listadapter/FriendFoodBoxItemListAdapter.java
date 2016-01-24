@@ -15,27 +15,28 @@ import java.util.Date;
 /**
  * Created by hanna on 2016-01-23.
  */
-public class FoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxItem> {
-    String myUserName;
-    public FoodBoxItemListAdapter(Query mRef, Activity activity, int layout, String username) {
+public class FriendFoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxItem> {
+    String userNameToExclude;
+    public FriendFoodBoxItemListAdapter(Query mRef, Activity activity, int layout, String aInUserNameToExclude) {
         super(mRef, FoodBoxItem.class, layout, activity);
-        myUserName = username;
+        userNameToExclude = aInUserNameToExclude;
     }
 
     @Override
     protected void populateView(View v, FoodBoxItem item) {
-        String userName = item.getUserName();
-        if (userName.equals(myUserName))
-        {
-            v.setVisibility(View.VISIBLE);
-            //v.setLayoutParams(new AbsListView.LayoutParams(-1, 1));
-            String itemName = item.getFoodName();
-            String expiryDate = ListActivity.expiryDateDisplay.format(new Date(item.getExpirationDate()));
+        String itemName = item.getFoodName();
+        String expiryDate = ListActivity.expiryDateDisplay.format(new Date(item.getExpirationDate()));
+        String friendName = item.getUserName();
 
-            TextView itemNameView = (TextView) v.findViewById(R.id.foodName);
+        if (!friendName.equals(userNameToExclude)) {
+            v.setVisibility(View.VISIBLE);
+            TextView userNameView = (TextView) v.findViewById(R.id.friend_friendName);
+            userNameView.setText(friendName);
+
+            TextView itemNameView = (TextView) v.findViewById(R.id.friend_foodName);
             itemNameView.setText(itemName);
 
-            TextView expiryDateView = (TextView) v.findViewById(R.id.expirationDate);
+            TextView expiryDateView = (TextView) v.findViewById(R.id.friend_expirationDate);
             expiryDateView.setText("Expires: " + expiryDate);
         }
         else
@@ -43,6 +44,5 @@ public class FoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxItem> {
             v.setVisibility(View.GONE);
             //v.setLayoutParams(new AbsListView.LayoutParams(-1, 1));
         }
-
     }
 }

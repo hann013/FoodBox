@@ -219,8 +219,8 @@ public class RecognitionActivity extends FragmentActivity {
 
                 try {
                     long newItemExpiryDate = ListActivity.expiryDateDisplay.parse(expiryDate.getText().toString()).getTime();
-                    FoodBoxItem newItem = new FoodBoxItem(newItemName, newItemExpiryDate, false);
-                    Firebase userRef = new Firebase(ListActivity.FIREBASE_URI).child("users").child(userName);
+                    FoodBoxItem newItem = new FoodBoxItem(newItemName, newItemExpiryDate, false, userName);
+                    Firebase userRef = new Firebase(ListActivity.FIREBASE_URI).child("items");
                     userRef.push().setValue(newItem);
                 } catch (ParseException e) {
                     Toast.makeText(RecognitionActivity.this, "Error saving item.", Toast.LENGTH_SHORT).show();

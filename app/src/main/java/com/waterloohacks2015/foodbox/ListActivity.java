@@ -43,6 +43,7 @@ public class ListActivity extends AppCompatActivity
 
     private Uri photoUri;
     private String userEmail;
+    private String userName;
 
     private Firebase ref;
     private Firebase userRef;
@@ -86,11 +87,11 @@ public class ListActivity extends AppCompatActivity
         drawerEmail.setText(userEmail);
 
         // username no email
-        String userName = userEmail.split("@")[0];
+        userName = userEmail.split("@")[0];
         System.out.println(userName);
 
         // get firebase user ref
-        userRef = ref.child("users").child(userName);
+        userRef = ref.child("items"); //.child(userName);
     }
 
     @Override
@@ -98,7 +99,7 @@ public class ListActivity extends AppCompatActivity
         super.onStart();
 
         final ListView mainList = (ListView) findViewById(R.id.main_list);
-        listAdapter = new FoodBoxItemListAdapter(userRef.orderByChild("expirationDate"), this, R.layout.food_view);
+        listAdapter = new FoodBoxItemListAdapter(userRef.orderByChild("expirationDate"), this, R.layout.food_view, userName);
         mainList.setAdapter(listAdapter);
     }
 
