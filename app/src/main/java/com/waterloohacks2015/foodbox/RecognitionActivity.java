@@ -1,7 +1,6 @@
 package com.waterloohacks2015.foodbox;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -11,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,7 +32,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple Activity that performs recognition using the Clarifai API.
@@ -221,7 +218,7 @@ public class RecognitionActivity extends FragmentActivity {
                 }
 
                 try {
-                    long newItemExpiryDate = ExpiryDaysFragment.expiryDateDisplay.parse(expiryDate.getText().toString()).getTime();
+                    long newItemExpiryDate = ListActivity.expiryDateDisplay.parse(expiryDate.getText().toString()).getTime();
                     FoodBoxItem newItem = new FoodBoxItem(newItemName, newItemExpiryDate, false);
                     Firebase userRef = new Firebase(ListActivity.FIREBASE_URI).child("users").child(userName);
                     userRef.push().setValue(newItem);

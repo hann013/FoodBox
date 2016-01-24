@@ -1,4 +1,4 @@
-package com.waterloohacks2015.foodbox;
+package com.waterloohacks2015.foodbox.listadapter;
 
 import android.app.Activity;
 import android.util.Log;

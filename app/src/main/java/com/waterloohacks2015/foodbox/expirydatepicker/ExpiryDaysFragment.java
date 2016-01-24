@@ -1,8 +1,6 @@
 package com.waterloohacks2015.foodbox.expirydatepicker;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -15,10 +13,10 @@ import android.widget.DatePicker;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import com.waterloohacks2015.foodbox.ListActivity;
 import com.waterloohacks2015.foodbox.R;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -26,7 +24,6 @@ import java.util.Date;
  * Created by lagarwal on 1/23/2016.
  */
 public class ExpiryDaysFragment extends DialogFragment {
-    public static SimpleDateFormat expiryDateDisplay = new SimpleDateFormat("yyyy-MM-dd");
     NumberPicker numberPicker;
     String expiryDate;
     TextView expiryDateView;
@@ -70,12 +67,12 @@ public class ExpiryDaysFragment extends DialogFragment {
 
     private void getExpirationDate(int days) throws ParseException {
         Calendar c = Calendar.getInstance();
-        String dateInString = (expiryDateDisplay.format(c.getTime()));
-        c.setTime(expiryDateDisplay.parse(dateInString));
+        String dateInString = (ListActivity.expiryDateDisplay.format(c.getTime()));
+        c.setTime(ListActivity.expiryDateDisplay.parse(dateInString));
         c.add(Calendar.DATE, days);
 
         expiryDateMillis = c.getTimeInMillis();
-        expiryDate = expiryDateDisplay.format(new Date(expiryDateMillis));
+        expiryDate = ListActivity.expiryDateDisplay.format(new Date(expiryDateMillis));
         expiryDateView.setText(expiryDate);
     }
 
@@ -100,7 +97,7 @@ public class ExpiryDaysFragment extends DialogFragment {
                 c.set(year, monthOfYear, dayOfMonth);
 
                 expiryDateMillis = c.getTimeInMillis();
-                expiryDate = expiryDateDisplay.format(new Date(expiryDateMillis));
+                expiryDate = ListActivity.expiryDateDisplay.format(new Date(expiryDateMillis));
                 expiryDateView.setText(expiryDate);
             }
         }, year, month, day);

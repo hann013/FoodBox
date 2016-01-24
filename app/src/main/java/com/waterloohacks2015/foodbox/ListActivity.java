@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,8 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.waterloohacks2015.foodbox.listadapter.FirebaseListAdapter;
+import com.waterloohacks2015.foodbox.listadapter.FoodBoxItemListAdapter;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -36,11 +39,14 @@ public class ListActivity extends AppCompatActivity
     public static final String FIREBASE_URI = "https://foodbox.firebaseio.com";
     public static final int IMAGE_CAPTURE_REQUEST_CODE = 100;
 
-    private ValueEventListener originalListener;
+    public static SimpleDateFormat expiryDateDisplay = new SimpleDateFormat("yyyy-MM-dd");
+
     private Uri photoUri;
     private String userEmail;
+
     private Firebase ref;
     private Firebase userRef;
+    private FirebaseListAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,40 +84,26 @@ public class ListActivity extends AppCompatActivity
         TextView drawerEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.drawer_email);
         drawerEmail.setText(userEmail);
 
-        //username no email
+        // username no email
         String userName = userEmail.split("@")[0];
         System.out.println(userName);
-        //get firebase ref
+
+        // get firebase user ref
         userRef = ref.child("users").child(userName);
-        System.out.println(userRef.toString());
+    }
 
-        //{"FoodBoxItem": {"expirationDate": 1453599939, "foodName": "apple", "isPublic": true}}
-        Time now = new Time();
-        now.setToNow();
-        userRef.push().setValue(new FoodBoxItem("apple", now.toMillis(true), true));
-        userRef.push().setValue(new FoodBoxItem("apple", now.toMillis(true), true));
-        userRef.addValueEventListener(originalListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                System.out.println("There are " + snapshot.getChildrenCount() + " foodBoxItems");
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    FoodBoxItem foodBoxItem = postSnapshot.getValue(FoodBoxItem.class);
-                    System.out.println(foodBoxItem.getFoodName() +
-                            " - " + foodBoxItem.getExpirationDate() + "-" + foodBoxItem.getIsPublic());
-                }
-            }
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("The read failed: " + firebaseError.getMessage());
-            }
-        });
+        final ListView mainList = (ListView) findViewById(R.id.main_list);
+        listAdapter = new FoodBoxItemListAdapter(userRef.orderByChild("expirationDate"), this, R.layout.food_view);
+        mainList.setAdapter(listAdapter);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        ref.removeEventListener(originalListener);
     }
 
     @Override
