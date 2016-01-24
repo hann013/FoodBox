@@ -40,4 +40,19 @@
         android:layout_height="wrap_content"
         android:id="@+id/friend_itemKey"
         android:visibility="gone"/>
+
+    <ImageButton
+        android:id="@+id/mailButton"
+        android:layout_alignBottom="@+id/friend_expirationDate"
+        android:layout_alignEnd="@+id/friend_friendName"
+        android:layout_width = "45dp"
+        android:layout_height= "22dp"
+        android:onClick="onMailButtonClick"
+        android:src="@drawable/email_button"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/itemKey2"
+        android:visibility="gone"/>
+
 </RelativeLayout>

@@ -2,6 +2,7 @@ package com.waterloohacks2015.foodbox;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.AvoidXfermode;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -11,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -98,5 +100,23 @@ public class FriendListActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void onMailButtonClick(View view) {
+        // delete item
+        View v = (View) view.getParent();
+        String itemKey = ((TextView) v.findViewById(R.id.itemKey2)).getText().toString();
+
+        usersRef.child(itemKey).removeValue();
+        String email = getSharedPreferences(getApplication().getPackageName(), MODE_PRIVATE ).getString(itemKey, " ");
+
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[] { email });
+        intent.putExtra(Intent.EXTRA_SUBJECT, "FoodBox Request!");
+        intent.putExtra(Intent.EXTRA_TEXT, "Let's talk about food.");
+
+        startActivity(Intent.createChooser(intent, "Send Email"));
     }
 }

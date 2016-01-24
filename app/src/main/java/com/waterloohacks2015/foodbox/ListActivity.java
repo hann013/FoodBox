@@ -67,7 +67,7 @@ public class ListActivity extends AppCompatActivity
                 toolbar.setBackgroundColor(Color.GREEN);
                 break;
             case "yellow":
-                toolbar.setBackgroundColor(Color.YELLOW);
+                toolbar.setBackgroundColor(Color.parseColor("#FFD700"));
                 break;
             case "red":
                 toolbar.setBackgroundColor(Color.RED);
