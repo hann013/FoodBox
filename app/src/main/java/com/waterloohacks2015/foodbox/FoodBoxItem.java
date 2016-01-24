@@ -9,6 +9,8 @@ public class FoodBoxItem {
     long expirationDate;
     boolean isPublic;
 
+    FoodBoxItem() {}
+
     FoodBoxItem(String aInFoodName, long aInExpirationDate, boolean aInIsPublic)
     {
         foodName = aInFoodName;
