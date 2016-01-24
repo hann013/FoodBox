@@ -5,9 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.text.format.Time;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,7 +13,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,9 +30,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import db.ListDBHelper;
+
 public class ListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public static final String USER_EMAIL = "USER_EMAIL";
+    public static final String INGREDIENT_NAME = "INGREDIENT_NAME";
     public static final String FIREBASE_URI = "https://foodbox.firebaseio.com";
     public static final int IMAGE_CAPTURE_REQUEST_CODE = 100;
 
@@ -65,7 +65,6 @@ public class ListActivity extends AppCompatActivity
                 dialog.show(getFragmentManager(), "AddFoodDialog");
             }
         });
-        fab.bringToFront();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -101,11 +100,6 @@ public class ListActivity extends AppCompatActivity
         final ListView mainList = (ListView) findViewById(R.id.main_list);
         listAdapter = new FoodBoxItemListAdapter(userRef.orderByChild("expirationDate"), this, R.layout.food_view, userName);
         mainList.setAdapter(listAdapter);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 
     @Override
@@ -178,5 +172,12 @@ public class ListActivity extends AppCompatActivity
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CANADA).format(new Date());
         File photoFile = new File(photoDir.getPath() + File.separator + "IMG_"+ timeStamp + ".jpg");
         return Uri.fromFile(photoFile);
+    }
+
+    public void onEatenButtonClick(View view) {
+        // delete item
+        View v = (View) view.getParent();
+        String itemKey = ((TextView) v.findViewById(R.id.itemKey)).getText().toString();
+        userRef.child(itemKey).removeValue();
     }
 }

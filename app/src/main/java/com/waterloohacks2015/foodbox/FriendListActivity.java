@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -25,11 +26,11 @@ import com.waterloohacks2015.foodbox.listadapter.FriendFoodBoxItemListAdapter;
 
 import java.util.Map;
 
-public class FriendListActivity extends AppCompatActivity {
+public class FriendListActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseListAdapter listAdapter;
     private Firebase usersRef;
-    private ValueEventListener originalListener;
     private String userName;
 
     @Override
@@ -45,53 +46,57 @@ public class FriendListActivity extends AppCompatActivity {
         usersRef = new  Firebase(ListActivity.FIREBASE_URI);
         usersRef = usersRef.child("items");
 
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.setDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.setNavigationItemSelectedListener(this);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
-        // Attach an listener to read the data at our posts reference
-//        usersRef.addValueEventListener(originalListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot snapshot) {
-//                System.out.println(snapshot.getValue());
-//                Map<String, Object> val = (Map) snapshot.getValue();
-//                for (String name : val.keySet()){
-//                    if (!name.equals(userName))
-//                    {
-//                        val.get(key);
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(FirebaseError firebaseError) {
-//                System.out.println("The read failed: " + firebaseError.getMessage());
-//            }
-//        });
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
-    }
+        // Set user email in nav bar
+        TextView drawerEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.drawer_email);
+        drawerEmail.setText(userEmail);
 
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-//        usersRef.removeEventListener(originalListener);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        final ListView mainList = (ListView) findViewById(R.id.friend_list);
+        final ListView mainList = (ListView) findViewById(R.id.main_list);
         listAdapter = new FriendFoodBoxItemListAdapter(
                 usersRef.orderByChild("expirationDate"), this, R.layout.food_friend_view, userName);
         mainList.setAdapter(listAdapter);
     }
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        System.out.println("nav clicked");
+        int id = item.getItemId();
+
+        if (id == R.id.my_food) {
+            Intent intent = new Intent(this, ListActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.add_friend) {
+
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }

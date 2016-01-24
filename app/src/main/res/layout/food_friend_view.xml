@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="5dip"
+    android:padding="15dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <TextView
@@ -34,4 +34,10 @@
         android:id="@+id/friend_expirationDate"
         android:layout_below="@+id/friend_foodName"
         android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/friend_itemKey"
+        android:visibility="gone"/>
 </RelativeLayout>

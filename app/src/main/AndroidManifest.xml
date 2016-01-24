@@ -11,13 +11,10 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"></activity>
         <activity
             android:name=".LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -29,8 +26,8 @@
         </activity>
         <activity
             android:name=".ListActivity"
-            android:label="@string/title_activity_list"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="My Food"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".NewFood"
             android:label="@string/title_New_Food" />
@@ -44,7 +41,11 @@
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".FriendListActivity"
-            android:label="@string/title_activity_friend_list"
+            android:label="Friends' Food"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".recipelist.RecipeList"
+            android:label="Recipes"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

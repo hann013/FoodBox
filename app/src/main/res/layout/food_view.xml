@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout
+    android:id="@+id/root_layout"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="15dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <Button
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:src="@drawable/ic_eat_icon"
         android:text="Eaten"
         android:id="@+id/eatenButton"
         android:onClick="onEatenButtonClick"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="false" />
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,6 +27,13 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
+    <ImageView
+        android:id="@+id/expiry_date_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_expiry_date_icon"
+        android:layout_below="@+id/foodName"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,5 +41,12 @@
         android:text="Expiry Date"
         android:id="@+id/expirationDate"
         android:layout_below="@+id/foodName"
-        android:layout_alignParentStart="true" />
+        android:layout_toEndOf="@+id/expiry_date_icon"
+        android:paddingLeft="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/itemKey"
+        android:visibility="gone"/>
 </RelativeLayout>

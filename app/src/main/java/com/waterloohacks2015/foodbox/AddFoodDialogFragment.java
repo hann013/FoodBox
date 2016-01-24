@@ -43,10 +43,9 @@ public class AddFoodDialogFragment extends DialogFragment {
                         takePicture();
                         break;
                     case 1:
-                        addFoodItem();
-                        break;
                     default:
                         // launch activity for adding new items
+                        addFoodItem();
                         break;
                 }
             }
@@ -64,8 +63,7 @@ public class AddFoodDialogFragment extends DialogFragment {
 
     private void addFoodItem()
     {
-        Intent newFoodIntent = new Intent(getActivity(), NewFood.class);
+        Intent newFoodIntent = new Intent(getActivity(), RecognitionActivity.class);
         startActivity(newFoodIntent);
-
     }
 }

@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".RecognitionActivity">
+    tools:context=".RecognitionActivity"
+    android:focusableInTouchMode="true">
 
     <ImageView
         android:id="@+id/food_image"
@@ -45,9 +46,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/food_name"
-            android:layout_alignStart="@+id/food_name"
+            android:layout_toEndOf="@+id/food_name_icon"
             android:paddingLeft="5dp"
             android:hint="Food name"
+            android:singleLine="true"
             android:visibility="gone" />
     </RelativeLayout>
 
@@ -73,5 +75,6 @@
         android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
         android:text="Save" />
 </LinearLayout>

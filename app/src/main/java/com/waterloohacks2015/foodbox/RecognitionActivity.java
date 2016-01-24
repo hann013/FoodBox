@@ -1,13 +1,10 @@
 package com.waterloohacks2015.foodbox;
 
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v7.widget.Toolbar;
 
 import com.clarifai.api.ClarifaiClient;
 import com.clarifai.api.RecognitionRequest;
@@ -53,14 +49,13 @@ public class RecognitionActivity extends FragmentActivity {
     private final ClarifaiClient client = new ClarifaiClient(APP_ID, APP_SECRET);
     private ImageView foodImage;
     private Spinner foodNameSpinner;
+    private EditText customFoodName;
     private TextView expiryDate;
-    ExpiryDaysFragment expiryDatePicker;
     private Button saveButton;
 
     private String userName;
 
     private ProgressDialog _progressDialog;
-    private static HealthScale userScale = new HealthScale();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +63,7 @@ public class RecognitionActivity extends FragmentActivity {
         setContentView(R.layout.activity_recognition);
         foodImage = (ImageView) findViewById(R.id.food_image);
         foodNameSpinner = (Spinner) findViewById(R.id.food_name);
+        customFoodName = (EditText) findViewById(R.id.food_name_custom);
         expiryDate = (TextView) findViewById(R.id.expiry_date);
         saveButton = (Button) findViewById(R.id.save_button);
 
@@ -76,31 +72,69 @@ public class RecognitionActivity extends FragmentActivity {
         userName = prefs.getString(ListActivity.USER_EMAIL, "").split("@")[0];
 
         //launch api
-        Uri photoUri = getIntent().getExtras().getParcelable(RecognitionActivity.INPUT_URI);
-        Log.d(TAG, "User picked image: " + photoUri);
-        Bitmap bitmap = loadBitmapFromUri(photoUri);
-        if (bitmap != null) {
-            foodImage.setImageBitmap(bitmap);
-            _progressDialog = new ProgressDialog(this);
-            _progressDialog.setMessage("Interpreting...");
-            _progressDialog.setCancelable(false);
-            _progressDialog.setInverseBackgroundForced(false);
-            _progressDialog.show();
+        if (getIntent().getExtras() != null) {
+            Uri photoUri = getIntent().getExtras().getParcelable(RecognitionActivity.INPUT_URI);
+            // load user image
+            Log.d(TAG, "User picked image: " + photoUri);
+            Bitmap bitmap = loadBitmapFromUri(photoUri);
+            if (bitmap != null) {
+                foodImage.setImageBitmap(bitmap);
+                _progressDialog = new ProgressDialog(this);
+                _progressDialog.setMessage("Interpreting...");
+                _progressDialog.setCancelable(false);
+                _progressDialog.setInverseBackgroundForced(false);
+                _progressDialog.show();
 
-            // Run recognition on a background thread since it makes a network call.
-            new AsyncTask<Bitmap, Void, RecognitionResult>() {
-                @Override
-                protected RecognitionResult doInBackground(Bitmap... bitmaps) {
-                    return recognizeBitmap(bitmaps[0]);
-                }
+                // Run recognition on a background thread since it makes a network call.
+                new AsyncTask<Bitmap, Void, RecognitionResult>() {
+                    @Override
+                    protected RecognitionResult doInBackground(Bitmap... bitmaps) {
+                        return recognizeBitmap(bitmaps[0]);
+                    }
 
-                @Override
-                protected void onPostExecute(RecognitionResult result) {
-                    updateUIForResult(result);
-                    _progressDialog.hide();
-                }
-            }.execute(bitmap);
+                    @Override
+                    protected void onPostExecute(RecognitionResult result) {
+                        updateUIForResult(result);
+                        _progressDialog.hide();
+                    }
+                }.execute(bitmap);
+            }
+        } else {
+            foodImage.setVisibility(View.GONE);
+            foodNameSpinner.setVisibility(View.GONE);
+            customFoodName.setVisibility(View.VISIBLE);
         }
+
+        // set datepicker dialog listener for expiry date
+        expiryDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new ExpiryDaysFragment().show(getSupportFragmentManager(), "ExpiryDatePicker");
+            }
+        });
+
+        // add onClickListener for save button
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newItemName = (String) foodNameSpinner.getSelectedItem();
+                if (newItemName == null || newItemName.equals("Custom")) {
+                    newItemName = ((EditText) findViewById(R.id.food_name_custom)).getText().toString();
+                }
+
+                try {
+                    long newItemExpiryDate = ListActivity.expiryDateDisplay.parse(expiryDate.getText().toString()).getTime();
+                    FoodBoxItem newItem = new FoodBoxItem(newItemName, newItemExpiryDate, false, userName);
+                    Firebase userRef = new Firebase(ListActivity.FIREBASE_URI).child("items");
+                    userRef.push().setValue(newItem);
+                } catch (ParseException e) {
+                    Toast.makeText(RecognitionActivity.this, "Error saving item.", Toast.LENGTH_SHORT).show();
+                } finally {
+                    // return to ListActivity
+                    startActivity(new Intent(RecognitionActivity.this, ListActivity.class));
+                }
+            }
+        });
     }
 
     /**
@@ -190,7 +224,6 @@ public class RecognitionActivity extends FragmentActivity {
         foodNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                EditText customFoodName = (EditText) findViewById(R.id.food_name_custom);
                 // selected "Custom"
                 if (position == listSize - 1) {
                     customFoodName.setVisibility(View.VISIBLE);
@@ -202,47 +235,6 @@ public class RecognitionActivity extends FragmentActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 // do nothing
-            }
-        });
-
-        // set datepicker dialog listener for expiry date
-        expiryDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new ExpiryDaysFragment().show(getSupportFragmentManager(), "ExpiryDatePicker");
-            }
-        });
-
-        // add onClickListener for save button
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String newItemName = (String) foodNameSpinner.getSelectedItem();
-                if (newItemName.equals("Custom")) {
-                    newItemName = ((EditText) findViewById(R.id.food_name_custom)).getText().toString();
-
-                    //Color of user health
-                    userScale.setColor(newItemName);
-                }
-                else {
-                    userScale.setColor(newItemName);
-                }
-
-                try {
-                    long newItemExpiryDate = ListActivity.expiryDateDisplay.parse(expiryDate.getText().toString()).getTime();
-                    FoodBoxItem newItem = new FoodBoxItem(newItemName, newItemExpiryDate, false, userName);
-                    Firebase userRef = new Firebase(ListActivity.FIREBASE_URI).child("items");
-                    userRef.push().setValue(newItem);
-                } catch (ParseException e) {
-                    Toast.makeText(RecognitionActivity.this, "Error saving item.", Toast.LENGTH_SHORT).show();
-                } finally {
-                    // return to ListActivity
-                    startActivity(new Intent(RecognitionActivity.this, ListActivity.class));
-                }
-                String color = userScale.getColor();
-                Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-                toolbar.setBackgroundColor(Color.parseColor("#FF0000"));
-
             }
         });
     }

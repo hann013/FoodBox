@@ -23,26 +23,43 @@ public class FriendFoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxIte
     }
 
     @Override
-    protected void populateView(View v, FoodBoxItem item) {
+    protected void populateView(View v, FoodBoxItem item, String key) {
+        String userName = item.getUserName();
         String itemName = item.getFoodName();
-        String expiryDate = ListActivity.expiryDateDisplay.format(new Date(item.getExpirationDate()));
-        String friendName = item.getUserName();
+        Date expiryDate = new Date(item.getExpirationDate());
 
-        if (!friendName.equals(userNameToExclude)) {
-            v.setVisibility(View.VISIBLE);
-            TextView userNameView = (TextView) v.findViewById(R.id.friend_friendName);
-            userNameView.setText(friendName);
 
-            TextView itemNameView = (TextView) v.findViewById(R.id.friend_foodName);
-            itemNameView.setText(itemName);
+        v.setVisibility(View.VISIBLE);
+        String expiryDateFormatted = ListActivity.expiryDateDisplay.format(expiryDate);
+        long daysAway = (expiryDate.getTime() - System.currentTimeMillis()) / (24 * 60 * 60 * 1000);
 
-            TextView expiryDateView = (TextView) v.findViewById(R.id.friend_expirationDate);
-            expiryDateView.setText("Expires: " + expiryDate);
+        TextView friendNameView = (TextView) v.findViewById(R.id.friend_friendName);
+        friendNameView.setText(userName);
+
+        TextView itemNameView = (TextView) v.findViewById(R.id.friend_foodName);
+        itemNameView.setText(itemName);
+
+        TextView expiryDateView = (TextView) v.findViewById(R.id.friend_expirationDate);
+
+        if (daysAway == 0) {
+            expiryDateView.setText(String.format("%s (today!)", expiryDateFormatted));
+        } else if (daysAway == 1) {
+            expiryDateView.setText(String.format("%s (%d day)", expiryDateFormatted, daysAway));
+        } else {
+            expiryDateView.setText(String.format("%s (%d days)", expiryDateFormatted, daysAway));
         }
-        else
+
+        TextView itemKey = (TextView) v.findViewById(R.id.friend_itemKey);
+        itemKey.setText(key);
+
+
+        v.setVisibility(View.VISIBLE);
+        v.setLayoutParams(new AbsListView.LayoutParams(-1, -2));
+
+        if (userName.equals(userNameToExclude))
         {
             v.setVisibility(View.GONE);
-            //v.setLayoutParams(new AbsListView.LayoutParams(-1, 1));
+            v.setLayoutParams(new AbsListView.LayoutParams(-1, 1));
         }
     }
 }
