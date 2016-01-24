@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.client.Query;
 import com.waterloohacks2015.foodbox.FoodBoxItem;
@@ -15,7 +14,6 @@ import com.waterloohacks2015.foodbox.R;
 import com.waterloohacks2015.foodbox.recipelist.RecipeList;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by hanna on 2016-01-23.
@@ -44,7 +42,9 @@ public class FoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxItem> {
         itemNameView.setText(itemName);
 
         TextView expiryDateView = (TextView) v.findViewById(R.id.expirationDate);
-        if (daysAway == 0) {
+        if (daysAway < 0) {
+            expiryDateView.setText(String.format("%s (EXPIRED)", expiryDateFormatted));
+        } else if (daysAway == 0) {
             expiryDateView.setText(String.format("%s (today!)", expiryDateFormatted));
         } else if (daysAway == 1) {
             expiryDateView.setText(String.format("%s (%d day)", expiryDateFormatted, daysAway));
