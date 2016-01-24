@@ -44,7 +44,7 @@
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".FriendListActivity"
-            android:label="@string/title_activity_friend_list"
+            android:label="Friends' Food"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

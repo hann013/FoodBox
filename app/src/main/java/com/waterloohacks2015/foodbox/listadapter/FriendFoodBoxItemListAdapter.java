@@ -15,11 +15,11 @@ import java.util.Date;
 /**
  * Created by hanna on 2016-01-23.
  */
-public class FoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxItem> {
-    String myUserName;
-    public FoodBoxItemListAdapter(Query mRef, Activity activity, int layout, String username) {
+public class FriendFoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxItem> {
+    String userNameToExclude;
+    public FriendFoodBoxItemListAdapter(Query mRef, Activity activity, int layout, String aInUserNameToExclude) {
         super(mRef, FoodBoxItem.class, layout, activity);
-        myUserName = username;
+        userNameToExclude = aInUserNameToExclude;
     }
 
     @Override
@@ -28,16 +28,20 @@ public class FoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxItem> {
         String itemName = item.getFoodName();
         Date expiryDate = new Date(item.getExpirationDate());
 
-        if (userName.equals(myUserName))
+        if (!userName.equals(userNameToExclude))
         {
             v.setVisibility(View.VISIBLE);
             String expiryDateFormatted = ListActivity.expiryDateDisplay.format(expiryDate);
             long daysAway = (expiryDate.getTime() - System.currentTimeMillis()) / (24 * 60 * 60 * 1000);
 
-            TextView itemNameView = (TextView) v.findViewById(R.id.foodName);
+            TextView friendNameView = (TextView) v.findViewById(R.id.friend_friendName);
+            friendNameView.setText(userName);
+
+            TextView itemNameView = (TextView) v.findViewById(R.id.friend_foodName);
             itemNameView.setText(itemName);
 
-            TextView expiryDateView = (TextView) v.findViewById(R.id.expirationDate);
+            TextView expiryDateView = (TextView) v.findViewById(R.id.friend_expirationDate);
+
             if (daysAway == 0) {
                 expiryDateView.setText(String.format("%s (today!)", expiryDateFormatted));
             } else if (daysAway == 1) {
@@ -46,7 +50,7 @@ public class FoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxItem> {
                 expiryDateView.setText(String.format("%s (%d days)", expiryDateFormatted, daysAway));
             }
 
-            TextView itemKey = (TextView) v.findViewById(R.id.itemKey);
+            TextView itemKey = (TextView) v.findViewById(R.id.friend_itemKey);
             itemKey.setText(key);
         }
         else
