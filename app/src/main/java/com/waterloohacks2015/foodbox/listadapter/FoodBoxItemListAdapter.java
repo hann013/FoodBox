@@ -28,31 +28,33 @@ public class FoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxItem> {
         String itemName = item.getFoodName();
         Date expiryDate = new Date(item.getExpirationDate());
 
-        if (userName.equals(myUserName))
-        {
-            v.setVisibility(View.VISIBLE);
-            String expiryDateFormatted = ListActivity.expiryDateDisplay.format(expiryDate);
-            long daysAway = (expiryDate.getTime() - System.currentTimeMillis()) / (24 * 60 * 60 * 1000);
 
-            TextView itemNameView = (TextView) v.findViewById(R.id.foodName);
-            itemNameView.setText(itemName);
+        v.setVisibility(View.VISIBLE);
+        String expiryDateFormatted = ListActivity.expiryDateDisplay.format(expiryDate);
+        long daysAway = (expiryDate.getTime() - System.currentTimeMillis()) / (24 * 60 * 60 * 1000);
 
-            TextView expiryDateView = (TextView) v.findViewById(R.id.expirationDate);
-            if (daysAway == 0) {
-                expiryDateView.setText(String.format("%s (today!)", expiryDateFormatted));
-            } else if (daysAway == 1) {
-                expiryDateView.setText(String.format("%s (%d day)", expiryDateFormatted, daysAway));
-            } else {
-                expiryDateView.setText(String.format("%s (%d days)", expiryDateFormatted, daysAway));
-            }
+        TextView itemNameView = (TextView) v.findViewById(R.id.foodName);
+        itemNameView.setText(itemName);
 
-            TextView itemKey = (TextView) v.findViewById(R.id.itemKey);
-            itemKey.setText(key);
+        TextView expiryDateView = (TextView) v.findViewById(R.id.expirationDate);
+        if (daysAway == 0) {
+            expiryDateView.setText(String.format("%s (today!)", expiryDateFormatted));
+        } else if (daysAway == 1) {
+            expiryDateView.setText(String.format("%s (%d day)", expiryDateFormatted, daysAway));
+        } else {
+            expiryDateView.setText(String.format("%s (%d days)", expiryDateFormatted, daysAway));
         }
-        else
+
+        TextView itemKey = (TextView) v.findViewById(R.id.itemKey);
+        itemKey.setText(key);
+
+        v.setVisibility(View.VISIBLE);
+        v.setLayoutParams(new AbsListView.LayoutParams(-1, -2));
+
+        if (!userName.equals(myUserName))
         {
             v.setVisibility(View.GONE);
-            //v.setLayoutParams(new AbsListView.LayoutParams(-1, 1));
+            v.setLayoutParams(new AbsListView.LayoutParams(-1, 1));
         }
     }
 }

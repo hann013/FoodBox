@@ -28,35 +28,38 @@ public class FriendFoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxIte
         String itemName = item.getFoodName();
         Date expiryDate = new Date(item.getExpirationDate());
 
-        if (!userName.equals(userNameToExclude))
-        {
-            v.setVisibility(View.VISIBLE);
-            String expiryDateFormatted = ListActivity.expiryDateDisplay.format(expiryDate);
-            long daysAway = (expiryDate.getTime() - System.currentTimeMillis()) / (24 * 60 * 60 * 1000);
 
-            TextView friendNameView = (TextView) v.findViewById(R.id.friend_friendName);
-            friendNameView.setText(userName);
+        v.setVisibility(View.VISIBLE);
+        String expiryDateFormatted = ListActivity.expiryDateDisplay.format(expiryDate);
+        long daysAway = (expiryDate.getTime() - System.currentTimeMillis()) / (24 * 60 * 60 * 1000);
 
-            TextView itemNameView = (TextView) v.findViewById(R.id.friend_foodName);
-            itemNameView.setText(itemName);
+        TextView friendNameView = (TextView) v.findViewById(R.id.friend_friendName);
+        friendNameView.setText(userName);
 
-            TextView expiryDateView = (TextView) v.findViewById(R.id.friend_expirationDate);
+        TextView itemNameView = (TextView) v.findViewById(R.id.friend_foodName);
+        itemNameView.setText(itemName);
 
-            if (daysAway == 0) {
-                expiryDateView.setText(String.format("%s (today!)", expiryDateFormatted));
-            } else if (daysAway == 1) {
-                expiryDateView.setText(String.format("%s (%d day)", expiryDateFormatted, daysAway));
-            } else {
-                expiryDateView.setText(String.format("%s (%d days)", expiryDateFormatted, daysAway));
-            }
+        TextView expiryDateView = (TextView) v.findViewById(R.id.friend_expirationDate);
 
-            TextView itemKey = (TextView) v.findViewById(R.id.friend_itemKey);
-            itemKey.setText(key);
+        if (daysAway == 0) {
+            expiryDateView.setText(String.format("%s (today!)", expiryDateFormatted));
+        } else if (daysAway == 1) {
+            expiryDateView.setText(String.format("%s (%d day)", expiryDateFormatted, daysAway));
+        } else {
+            expiryDateView.setText(String.format("%s (%d days)", expiryDateFormatted, daysAway));
         }
-        else
+
+        TextView itemKey = (TextView) v.findViewById(R.id.friend_itemKey);
+        itemKey.setText(key);
+
+
+        v.setVisibility(View.VISIBLE);
+        v.setLayoutParams(new AbsListView.LayoutParams(-1, -2));
+
+        if (userName.equals(userNameToExclude))
         {
             v.setVisibility(View.GONE);
-            //v.setLayoutParams(new AbsListView.LayoutParams(-1, 1));
+            v.setLayoutParams(new AbsListView.LayoutParams(-1, 1));
         }
     }
 }
