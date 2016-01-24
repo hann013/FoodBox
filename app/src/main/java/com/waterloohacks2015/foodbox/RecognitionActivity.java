@@ -1,10 +1,13 @@
 package com.waterloohacks2015.foodbox;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -19,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 import com.clarifai.api.ClarifaiClient;
 import com.clarifai.api.RecognitionRequest;
@@ -56,6 +60,7 @@ public class RecognitionActivity extends FragmentActivity {
     private String userName;
 
     private ProgressDialog _progressDialog;
+    private static HealthScale userScale = new HealthScale();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -215,6 +220,12 @@ public class RecognitionActivity extends FragmentActivity {
                 String newItemName = (String) foodNameSpinner.getSelectedItem();
                 if (newItemName.equals("Custom")) {
                     newItemName = ((EditText) findViewById(R.id.food_name_custom)).getText().toString();
+
+                    //Color of user health
+                    userScale.setColor(newItemName);
+                }
+                else {
+                    userScale.setColor(newItemName);
                 }
 
                 try {
@@ -228,6 +239,10 @@ public class RecognitionActivity extends FragmentActivity {
                     // return to ListActivity
                     startActivity(new Intent(RecognitionActivity.this, ListActivity.class));
                 }
+                String color = userScale.getColor();
+                Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+                toolbar.setBackgroundColor(Color.parseColor("#FF0000"));
+
             }
         });
     }
