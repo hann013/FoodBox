@@ -6,10 +6,10 @@ package com.waterloohacks2015.foodbox;
 public class FoodBoxItem {
 
     String foodName;
-    int expirationDate;
+    long expirationDate;
     boolean isPublic;
 
-    FoodBoxItem(String aInFoodName, int aInExpirationDate, boolean aInIsPublic)
+    FoodBoxItem(String aInFoodName, long aInExpirationDate, boolean aInIsPublic)
     {
         foodName = aInFoodName;
         expirationDate = aInExpirationDate;
@@ -21,7 +21,7 @@ public class FoodBoxItem {
         return foodName;
     }
 
-    public int getExpirationDate()
+    public long getExpirationDate()
     {
         return expirationDate;
     }

@@ -26,7 +26,7 @@ import java.util.Date;
  * Created by lagarwal on 1/23/2016.
  */
 public class ExpiryDaysFragment extends DialogFragment {
-    SimpleDateFormat expiryDateDisplay = new SimpleDateFormat("yyyy-MM-dd");
+    public static SimpleDateFormat expiryDateDisplay = new SimpleDateFormat("yyyy-MM-dd");
     NumberPicker numberPicker;
     String expiryDate;
     TextView expiryDateView;
@@ -68,7 +68,7 @@ public class ExpiryDaysFragment extends DialogFragment {
         return view;
     }
 
-    public void getExpirationDate(int days) throws ParseException {
+    private void getExpirationDate(int days) throws ParseException {
         Calendar c = Calendar.getInstance();
         String dateInString = (expiryDateDisplay.format(c.getTime()));
         c.setTime(expiryDateDisplay.parse(dateInString));
@@ -77,6 +77,10 @@ public class ExpiryDaysFragment extends DialogFragment {
         expiryDateMillis = c.getTimeInMillis();
         expiryDate = expiryDateDisplay.format(new Date(expiryDateMillis));
         expiryDateView.setText(expiryDate);
+    }
+
+    public long getExpiryDateMillis() {
+        return expiryDateMillis;
     }
 
     private void showDatePicker() {

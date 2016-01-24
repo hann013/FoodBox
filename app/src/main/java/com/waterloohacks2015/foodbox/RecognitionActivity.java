@@ -2,6 +2,8 @@ package com.waterloohacks2015.foodbox;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -25,11 +27,14 @@ import com.clarifai.api.RecognitionRequest;
 import com.clarifai.api.RecognitionResult;
 import com.clarifai.api.Tag;
 import com.clarifai.api.exception.ClarifaiException;
+import com.firebase.client.Firebase;
 import com.waterloohacks2015.foodbox.expirydatepicker.ExpiryDaysFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple Activity that performs recognition using the Clarifai API.
@@ -46,9 +51,12 @@ public class RecognitionActivity extends FragmentActivity {
 
     private final ClarifaiClient client = new ClarifaiClient(APP_ID, APP_SECRET);
     private ImageView foodImage;
+    private Spinner foodNameSpinner;
     private TextView expiryDate;
     ExpiryDaysFragment expiryDatePicker;
     private Button saveButton;
+
+    private String userName;
 
     private ProgressDialog _progressDialog;
 
@@ -57,8 +65,13 @@ public class RecognitionActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recognition);
         foodImage = (ImageView) findViewById(R.id.food_image);
+        foodNameSpinner = (Spinner) findViewById(R.id.food_name);
         expiryDate = (TextView) findViewById(R.id.expiry_date);
         saveButton = (Button) findViewById(R.id.save_button);
+
+        // get user name
+        SharedPreferences prefs = getSharedPreferences(getApplication().getPackageName(), MODE_PRIVATE);
+        userName = prefs.getString(ListActivity.USER_EMAIL, "").split("@")[0];
 
         //launch api
         Uri photoUri = getIntent().getExtras().getParcelable(RecognitionActivity.INPUT_URI);
@@ -171,7 +184,6 @@ public class RecognitionActivity extends FragmentActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, foodItems);
-        Spinner foodNameSpinner = (Spinner) findViewById(R.id.food_name);
         foodNameSpinner.setAdapter(adapter);
         foodNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -195,12 +207,32 @@ public class RecognitionActivity extends FragmentActivity {
         expiryDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                expiryDatePicker = new ExpiryDaysFragment();
-                expiryDatePicker.show(getSupportFragmentManager(), "ExpiryDatePicker");
+                new ExpiryDaysFragment().show(getSupportFragmentManager(), "ExpiryDatePicker");
             }
         });
 
         // add onClickListener for save button
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newItemName = (String) foodNameSpinner.getSelectedItem();
+                if (newItemName.equals("Custom")) {
+                    newItemName = ((EditText) findViewById(R.id.food_name_custom)).getText().toString();
+                }
+
+                try {
+                    long newItemExpiryDate = ExpiryDaysFragment.expiryDateDisplay.parse(expiryDate.getText().toString()).getTime();
+                    FoodBoxItem newItem = new FoodBoxItem(newItemName, newItemExpiryDate, false);
+                    Firebase userRef = new Firebase(ListActivity.FIREBASE_URI).child("users").child(userName);
+                    userRef.push().setValue(newItem);
+                } catch (ParseException e) {
+                    Toast.makeText(RecognitionActivity.this, "Error saving item.", Toast.LENGTH_SHORT).show();
+                } finally {
+                    // return to ListActivity
+                    startActivity(new Intent(RecognitionActivity.this, ListActivity.class));
+                }
+            }
+        });
     }
 }
 
