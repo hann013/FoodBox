@@ -111,20 +111,10 @@ public class FriendListActivity extends AppCompatActivity
     }
 
     public void onMailButtonClick(View view) {
-        // delete item
-        View v = (View) view.getParent();
-        String itemKey = ((TextView) v.findViewById(R.id.itemKey2)).getText().toString();
-
-        usersRef.child(itemKey).removeValue();
-        String email = getSharedPreferences(getApplication().getPackageName(), MODE_PRIVATE ).getString(itemKey, " ");
-
-
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[] { email });
         intent.putExtra(Intent.EXTRA_SUBJECT, "FoodBox Request!");
         intent.putExtra(Intent.EXTRA_TEXT, "Let's talk about food.");
-
         startActivity(Intent.createChooser(intent, "Send Email"));
     }
 }

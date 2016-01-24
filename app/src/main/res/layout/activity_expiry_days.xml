@@ -48,13 +48,15 @@
                 android:id="@+id/confirmButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ok" />
+                android:text="Ok"
+                style="@style/Widget.AppCompat.Button.Colored" />
 
             <Button
                 android:id="@+id/expiryDateButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Choose date" />
+                android:text="Choose date"
+                style="@style/Widget.AppCompat.Button.Colored" />
         </LinearLayout>
 
     </RelativeLayout>
