@@ -28,7 +28,6 @@ import java.util.Locale;
 
 public class ListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    public static final String USER_ID = "USER_ID";
     public static final String USER_EMAIL = "USER_EMAIL";
     public static final String FIREBASE_URI = "https://foodbox.firebaseio.com";
     public static final int IMAGE_CAPTURE_REQUEST_CODE = 100;

@@ -1,6 +1,7 @@
 package com.waterloohacks2015.foodbox;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -45,6 +47,7 @@ public class RecognitionActivity extends FragmentActivity {
     private final ClarifaiClient client = new ClarifaiClient(APP_ID, APP_SECRET);
     private ImageView foodImage;
     private TextView expiryDate;
+    ExpiryDaysFragment expiryDatePicker;
     private Button saveButton;
 
     private ProgressDialog _progressDialog;
@@ -192,7 +195,7 @@ public class RecognitionActivity extends FragmentActivity {
         expiryDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ExpiryDaysFragment expiryDatePicker = new ExpiryDaysFragment();
+                expiryDatePicker = new ExpiryDaysFragment();
                 expiryDatePicker.show(getSupportFragmentManager(), "ExpiryDatePicker");
             }
         });
