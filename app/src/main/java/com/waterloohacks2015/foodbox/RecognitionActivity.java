@@ -121,6 +121,7 @@ public class RecognitionActivity extends FragmentActivity {
                 if (newItemName == null || newItemName.equals("Custom")) {
                     newItemName = ((EditText) findViewById(R.id.food_name_custom)).getText().toString();
                 }
+                HealthScale.setColor(newItemName);
 
                 try {
                     long newItemExpiryDate = ListActivity.expiryDateDisplay.parse(expiryDate.getText().toString()).getTime();
