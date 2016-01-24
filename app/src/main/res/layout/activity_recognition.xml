@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical"
     tools:context=".RecognitionActivity"
     android:focusableInTouchMode="true">
@@ -11,22 +10,36 @@
         android:id="@+id/food_image"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_weight="1"
         android:contentDescription="Image"
         android:scaleType="centerCrop" />
 
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingLeft="10dp"
-        android:text="Item Details"
-        android:textSize="24sp"/>
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/item_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="Item Details"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:textColor="@color/white"
+            android:background="@color/colorPrimary"/>
+        <Button
+            android:id="@+id/save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignEnd="@+id/item_details"
+            android:layout_alignBottom="@+id/item_details"
+            android:text="Save"
+            style="@style/Widget.AppCompat.Button.Colored"/>
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:paddingTop="20dp"
+        android:paddingLeft="10dp">
         <ImageView
             android:id="@+id/food_name_icon"
             android:layout_width="wrap_content"
@@ -47,7 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/food_name"
             android:layout_toEndOf="@+id/food_name_icon"
-            android:paddingLeft="5dp"
+            android:paddingLeft="10dp"
             android:hint="Food name"
             android:singleLine="true"
             android:visibility="gone" />
@@ -56,7 +69,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:paddingTop="20dp"
+        android:paddingLeft="10dp">
         <ImageView
             android:id="@+id/expiry_date_icon"
             android:layout_width="wrap_content"
@@ -65,16 +79,10 @@
         <TextView
             android:id="@+id/expiry_date"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/expiry_date_icon"
             android:paddingLeft="16dp"
             android:textSize="16sp"
             android:text="Expiry date" />
     </RelativeLayout>
-    <Button
-        android:id="@+id/save_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:text="Save" />
 </LinearLayout>
