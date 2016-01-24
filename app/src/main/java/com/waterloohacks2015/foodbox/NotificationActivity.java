@@ -1,11 +1,15 @@
 package com.waterloohacks2015.foodbox;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -41,18 +45,19 @@ public class NotificationActivity extends Activity {
 
                 builder.setAutoCancel(false);
                 builder.setTicker("this is ticker text");
-                builder.setContentTitle("WhatsApp Notification");
-                builder.setContentText("You have a new message");
-                //builder.setSmallIcon(R.drawable.ic_launcher);
+                builder.setContentTitle("FoodBox Notification");
+                builder.setContentText("Your apple is going to expire in 3 days");
+                builder.setSmallIcon(R.drawable.ic_menu_friends_food);
                 builder.setContentIntent(pendingIntent);
                 builder.setOngoing(true);
-                builder.setSubText("This is subtext...");   //API level 16
+                builder.setSubText("Tap to see your options");   //API level 16
                 builder.setNumber(100);
                 builder.build();
 
                 myNotication = builder.getNotification();
                 manager.notify(11, myNotication);
 
+                Log.d("Notification", "New notification printed");
             /*
             //API level 8
             Notification myNotification8 = new Notification(R.drawable.ic_launcher, "this is ticker text 8", System.currentTimeMillis());
@@ -79,4 +84,5 @@ public class NotificationActivity extends Activity {
         btnShow = (Button) findViewById(R.id.btnShowNotification);
         btnClear = (Button) findViewById(R.id.btnClearNotification);
     }
+
 }

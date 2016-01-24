@@ -3,13 +3,19 @@ package db;
 /**
  * Created by jennadeng on 2016-01-23.
  */
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
+
+import com.waterloohacks2015.foodbox.R;
 
 public class ListDBHelper extends SQLiteOpenHelper {
 
@@ -60,7 +66,7 @@ public class ListDBHelper extends SQLiteOpenHelper {
 
     public Cursor displayData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, new String[] {KEY_ID, COL_2, COL_3},
+        Cursor cursor = db.query(TABLE_NAME, new String[]{KEY_ID, COL_2, COL_3},
                 null, null, null, null, COL_3 + " ASC");
         /*Cursor cursor = db.rawQuery("select " + _ID + " AS _id, " + "," + COL_2 + "," + COL_3 +
                 " from " + TABLE_NAME, null);*/
@@ -69,4 +75,6 @@ public class ListDBHelper extends SQLiteOpenHelper {
         }
         return cursor;
     }
+
+
 }

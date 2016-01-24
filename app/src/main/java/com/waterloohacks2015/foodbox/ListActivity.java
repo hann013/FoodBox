@@ -2,10 +2,12 @@ package com.waterloohacks2015.foodbox;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -49,12 +51,30 @@ public class ListActivity extends AppCompatActivity
     private Firebase userRef;
     private FirebaseListAdapter listAdapter;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        String color = HealthScale.getColor();
+        Log.d("This color is in main:", color);
+        switch (color) {
+            case "green":
+                toolbar.setBackgroundColor(Color.GREEN);
+                break;
+            case "yellow":
+                toolbar.setBackgroundColor(Color.YELLOW);
+                break;
+            case "red":
+                toolbar.setBackgroundColor(Color.RED);
+                break;
+            default :
+                break;
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +85,7 @@ public class ListActivity extends AppCompatActivity
                 dialog.show(getFragmentManager(), "AddFoodDialog");
             }
         });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
