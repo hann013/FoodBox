@@ -6,24 +6,25 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.widget.EditText;
+import android.widget.TextView;
 
-public class PickFoodDialogFragment extends DialogFragment {
+import java.util.jar.Attributes;
 
-    CharSequence[] _foodItems;
-    int _chosen;
+/**
+ * Created by dxu on 16-01-23.
+ */
+public class NameOtherDialogFragment extends DialogFragment {
 
-    public void setFoodItems(CharSequence[] foodItems) {
-        _foodItems = foodItems;
-    }
+    String _otherFoodName = "";
 
-    public String getSelectedItem()
-    {
-        if (_foodItems == null) return "";
-        return _foodItems[_chosen].toString();
+    public String getOtherFood(){
+        return _otherFoodName;
     }
 
     public interface OnDialogChosenListener {
-        public void onDialogPositiveClick(DialogFragment dialog);
+        public void onOtherDialogClick(DialogFragment dialog);
     }
 
     OnDialogChosenListener mListener;
@@ -31,16 +32,19 @@ public class PickFoodDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("What do you want to add?")
-                .setItems(_foodItems, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                        _chosen = which;
-                        mListener.onDialogPositiveClick(PickFoodDialogFragment.this);
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        builder.setView(inflater.inflate(R.layout.dialog_other, null))
+                // Add action buttons
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        // sign in the user ...
+                        Dialog diag = (Dialog) dialog;
+                        EditText editText = (EditText) diag.findViewById(R.id.other_food);
+                        _otherFoodName = editText.getText().toString();
+                        mListener.onOtherDialogClick(NameOtherDialogFragment.this);
                     }
                 });
-
         return builder.create();
     }
 
@@ -58,6 +62,4 @@ public class PickFoodDialogFragment extends DialogFragment {
                     + " must implement OnDialogChosenListener");
         }
     }
-
 }
-

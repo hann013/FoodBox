@@ -34,6 +34,13 @@ public class LoginActivity extends AppCompatActivity {
         Button loginButton = (Button) findViewById(R.id.login_button);
         Button signupButton = (Button) findViewById(R.id.signup_button);
 
+        //pre-population email if available
+        SharedPreferences prefs = getSharedPreferences(getApplication().getPackageName(), MODE_PRIVATE);
+        String preEmail = prefs.getString(ListActivity.USER_EMAIL, null);
+        if (preEmail != null) {
+            email.setText(preEmail);
+        }
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

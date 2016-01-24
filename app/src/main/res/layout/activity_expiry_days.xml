@@ -26,7 +26,7 @@
             android:textSize="25dp"
             android:text="Expires in " />
 
-        <com.waterloohacks2015.foodbox.NumberPicker
+        <com.waterloohacks2015.foodbox.expirydatepicker.NumberPicker
             android:id="@+id/numberPicker1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -50,8 +50,7 @@
             android:id="@+id/confirmButton"
             android:text="Ok"
             android:layout_below="@id/numberPicker1"
-            android:layout_centerHorizontal="true"
-            />
+            android:layout_centerHorizontal="true" />
 
         <Button
             android:layout_width="wrap_content"
