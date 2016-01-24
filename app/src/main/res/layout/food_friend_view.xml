@@ -43,12 +43,14 @@
 
     <ImageButton
         android:id="@+id/mailButton"
-        android:layout_alignBottom="@+id/friend_expirationDate"
-        android:layout_alignEnd="@+id/friend_friendName"
         android:layout_width = "45dp"
-        android:layout_height= "22dp"
+        android:layout_height= "30dp"
         android:onClick="onMailButtonClick"
-        android:src="@drawable/email_button"/>
+        android:scaleType="fitXY"
+        android:src="@drawable/mail"
+        android:padding="0dp"
+        android:layout_below="@+id/friend_friendName"
+        android:layout_alignEnd="@+id/friend_friendName" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
