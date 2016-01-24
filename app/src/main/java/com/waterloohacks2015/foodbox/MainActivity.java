@@ -28,6 +28,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         updateUI();
+        Intent login = new Intent(this, LoginActivity.class);
+        startActivity(login);
 
 /*
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

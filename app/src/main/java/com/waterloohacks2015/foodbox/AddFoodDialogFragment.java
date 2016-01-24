@@ -42,6 +42,9 @@ public class AddFoodDialogFragment extends DialogFragment {
                         // launch camera
                         takePicture();
                         break;
+                    case 1:
+                        addFoodItem();
+                        break;
                     default:
                         // launch activity for adding new items
                         break;
@@ -57,5 +60,12 @@ public class AddFoodDialogFragment extends DialogFragment {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
         getActivity().startActivityForResult(cameraIntent, ListActivity.IMAGE_CAPTURE_REQUEST_CODE);
+    }
+
+    private void addFoodItem()
+    {
+        Intent newFoodIntent = new Intent(getActivity(), NewFood.class);
+        startActivity(newFoodIntent);
+
     }
 }

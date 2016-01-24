@@ -4,17 +4,17 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="15dp"
+    android:padding="5dip"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <Button
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Eaten"
-        android:id="@+id/eatenButton"
-        android:onClick="onEatenButtonClick"
+        android:text="FriendName"
+        android:id="@+id/friend_friendName"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_alignParentEnd="false" />
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Food Name"
-        android:id="@+id/foodName"
+        android:id="@+id/friend_foodName"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Expiry Date"
-        android:id="@+id/expirationDate"
-        android:layout_below="@+id/foodName"
+        android:id="@+id/friend_expirationDate"
+        android:layout_below="@+id/friend_foodName"
         android:layout_alignParentStart="true" />
 </RelativeLayout>

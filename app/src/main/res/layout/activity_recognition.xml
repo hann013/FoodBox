@@ -1,28 +1,77 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:gravity="center"
-              tools:context=".RecognitionActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".RecognitionActivity">
 
-  <ImageView
-      android:id="@+id/image_view"
-      android:layout_width="match_parent"
-      android:layout_height="200dp"
-      android:layout_weight="1"
-      android:scaleType="centerCrop"
-      android:contentDescription="Image"/>
+    <ImageView
+        android:id="@+id/food_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_weight="1"
+        android:contentDescription="Image"
+        android:scaleType="centerCrop" />
 
-  <TextView
-      android:id="@+id/text_view"
-      android:textColor="#fff"
-      android:textSize="16sp"
-      android:gravity="center"
-      android:padding="16dp"
-      android:layout_width="match_parent"
-      android:layout_height="100dp"
-      android:layout_weight="0.4"
-      />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:text="Item Details"
+        android:textSize="24sp"/>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+        <ImageView
+            android:id="@+id/food_name_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:src="@drawable/ic_food_name_icon" />
+
+        <Spinner
+            android:id="@+id/food_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/food_name_icon"
+            android:paddingLeft="5dp" />
+
+        <EditText
+            android:id="@+id/food_name_custom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/food_name"
+            android:layout_alignStart="@+id/food_name"
+            android:paddingLeft="5dp"
+            android:hint="Food name"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+        <ImageView
+            android:id="@+id/expiry_date_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_expiry_date_icon" />
+        <TextView
+            android:id="@+id/expiry_date"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_toEndOf="@+id/expiry_date_icon"
+            android:paddingLeft="16dp"
+            android:textSize="16sp"
+            android:text="Expiry date" />
+    </RelativeLayout>
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save" />
 </LinearLayout>

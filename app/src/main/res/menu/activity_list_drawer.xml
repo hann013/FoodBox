@@ -7,11 +7,11 @@
             android:icon="@drawable/ic_menu_my_food"
             android:title="My Food" />
         <item
-            android:id="@+id/add_friend"
+            android:id="@+id/friends_food"
             android:icon="@drawable/ic_menu_friends_food"
             android:title="Friends' Food" />
         <item
-            android:id="@+id/friends_food"
+            android:id="@+id/add_friend"
             android:icon="@drawable/ic_menu_signout"
             android:title="Sign Out" />
     </group>

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.text.format.Time;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,10 +17,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+import com.waterloohacks2015.foodbox.listadapter.FirebaseListAdapter;
+import com.waterloohacks2015.foodbox.listadapter.FoodBoxItemListAdapter;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -28,14 +35,19 @@ import java.util.Locale;
 
 public class ListActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    public static final String USER_ID = "USER_ID";
     public static final String USER_EMAIL = "USER_EMAIL";
     public static final String FIREBASE_URI = "https://foodbox.firebaseio.com";
     public static final int IMAGE_CAPTURE_REQUEST_CODE = 100;
 
+    public static SimpleDateFormat expiryDateDisplay = new SimpleDateFormat("yyyy-MM-dd");
+
     private Uri photoUri;
     private String userEmail;
+    private String userName;
+
     private Firebase ref;
+    private Firebase userRef;
+    private FirebaseListAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +65,7 @@ public class ListActivity extends AppCompatActivity
                 dialog.show(getFragmentManager(), "AddFoodDialog");
             }
         });
+        fab.bringToFront();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -72,6 +85,27 @@ public class ListActivity extends AppCompatActivity
         userEmail = prefs.getString(USER_EMAIL, "");
         TextView drawerEmail = (TextView) navigationView.getHeaderView(0).findViewById(R.id.drawer_email);
         drawerEmail.setText(userEmail);
+
+        // username no email
+        userName = userEmail.split("@")[0];
+        System.out.println(userName);
+
+        // get firebase user ref
+        userRef = ref.child("items"); //.child(userName);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        final ListView mainList = (ListView) findViewById(R.id.main_list);
+        listAdapter = new FoodBoxItemListAdapter(userRef.orderByChild("expirationDate"), this, R.layout.food_view, userName);
+        mainList.setAdapter(listAdapter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -88,11 +122,14 @@ public class ListActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        System.out.println("nav clicked");
         int id = item.getItemId();
 
         if (id == R.id.my_food) {
 
         } else if (id == R.id.friends_food) {
+            Intent intent = new Intent(this, FriendListActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.add_friend) {
 
