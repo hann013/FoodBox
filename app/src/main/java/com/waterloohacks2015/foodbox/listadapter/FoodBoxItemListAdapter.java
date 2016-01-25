@@ -32,7 +32,7 @@ public class FoodBoxItemListAdapter extends FirebaseListAdapter<FoodBoxItem> {
 
 
     public FoodBoxItemListAdapter(Query mRef, Activity activity, int layout, String username) {
-        super(mRef, FoodBoxItem.class, layout, activity);
+        super(mRef, FoodBoxItem.class, layout, activity);    
         myUserName = username;
         currentActivity = activity;
     }
